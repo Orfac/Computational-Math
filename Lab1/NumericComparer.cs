@@ -12,7 +12,7 @@ namespace GaussMethod
 
         public static bool Compare(double x, double y)
         {
-            return x - y < _error;
+            return Math.Abs(x - y) < _error;
         }
     }
 }

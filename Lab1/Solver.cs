@@ -22,16 +22,16 @@ namespace GaussMethod
             for (int i = height - 1; i >= 0; i--)
             {
                 // Запись числа из столбца значений
-                double unknownValue = matrix[width - 1, i];
+                double unknownValue = matrix[i, width - 1];
 
                 // Подставляем известные переменные
                 for (int j = i + 1; j < width - 1; j++)
-                    unknownValue -= matrix[j, i] * result[j];
+                    unknownValue -= matrix[i, j] * result[j];
 
                 // Находим новую переменную поделив на коэффициент перед ней
                 unknownValue /= matrix[i, i];
 
-                // Запоминаем переменную
+                // Записываем переменную в ответ
                 result[i] = unknownValue;
             }
 
@@ -40,15 +40,18 @@ namespace GaussMethod
 
         public static bool ToTriangular(ref Matrix matrix)
         {
-            for (int i = 0; i < matrix.Height - 1; i++)
+            for (int i = 0; i < matrix.Height; i++)
             {
                 for (int j = i + 1; j < matrix.Height; j++)
                 {
+                    // Если равно 0, то при решении Гауссом найдём бесконечное число решений
                     if (!NumericComparer.Compare(matrix[i, i], 0))
                     {
-                        if (!NumericComparer.Compare(matrix[i, j], 0))
-                            matrix.AddRow(i, j, -matrix[i, j] / matrix[i, i]);
-                    } else
+                        // Для каждого элемента "обнуляем" его
+                        if (!NumericComparer.Compare(matrix[j, i], 0))
+                            matrix.AddRow(i, j, -matrix[j, i] / matrix[i, i]);
+                    }
+                    else
                     {
                         return false;
                     }
