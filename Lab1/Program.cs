@@ -1,88 +1,85 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
-namespace GaussMethod
+namespace Lab1
 {
-    class Program
+    internal class Program
     {
+        private const int MaxMatrixHeight = 20;
+
         public static void Main(string[] args)
         {
-            Matrix matrix = null;
-            InputMatrix(ref matrix);
-            
+            Matrix matrix;
+            do
+            {
+                matrix = InputMatrix();
+            } while (matrix == null);
+
+
             Console.WriteLine(matrix);
-            Console.Write("Определитель матрицы: ");
-            Console.WriteLine(matrix.Determinant);
-            double[] completedMatrix = Solver.Solve(matrix);
-            if (completedMatrix == null)
+            var solver = new Solver();
+            var solutions = solver.Solve(matrix);
+            if (solutions == null)
             {
                 Console.WriteLine("Матрицу не удалось решить методом Гаусса");
-                
             }
             else
             {
                 Console.WriteLine("Треугольный вид");
                 Console.WriteLine(matrix);
-                decimal[] errors = matrix.GetErrors(completedMatrix);
+                var errors = matrix.GetErrors(solutions);
                 Console.WriteLine("Решения и невязки");
-                for (int i = 0; i < completedMatrix.Length; i++)
-                {
-                    Console.WriteLine($"X{i}: {completedMatrix[i]} | error: {errors[i]} ");
-                }
-                
+                for (var i = 0; i < solutions.Length; i++)
+                    Console.WriteLine($"X{i+1}: {solutions[i]} | error: {errors[i]} ");
             }
-           
 
+            Console.Write("Определитель матрицы: ");
+            Console.WriteLine(matrix.GetDeterminant());
         }
 
-        private static void InputMatrix(ref Matrix matrix)
+        private static Matrix InputMatrix()
         {
-            do
-            {
-                int k = AskCount();
-                
-                ShowMenu();
-                char choice = Console.ReadKey(true).KeyChar;
-                switch (choice)
-                {
-                    case '1':
-                        matrix = ConsoleInput(k);
-                        break;
-                    case '2':
-                        matrix = FileInput(k);
-                        break;
-                    case '3':
-                        matrix = RandomInput(k);
-                        break;
-                    default:
-                        matrix = null;
-                        break;
-                }
+            var k = AskCount();
+            ShowMenu();
 
-            } while (matrix == null);
+            var choice = Console.ReadLine();
+            switch (choice)
+            {
+                case "1":
+                    return ConsoleInput(k);
+                case "2":
+                    return FileInput(k);
+                case "3":
+                    return RandomInput(k);
+                default:
+                    throw new InvalidDataException();
+            }
         }
 
         private static int AskCount()
         {
-            bool isInputCorrect = true;
             do
             {
                 Console.WriteLine("-------------------------------------------");
                 Console.WriteLine("Введите размер матрицы k");
-                isInputCorrect = int.TryParse(Console.ReadLine(), out int k);
-                if (isInputCorrect)
+                var isInputCorrect = int.TryParse(Console.ReadLine(), out var k);
+                if (isInputCorrect && k > 0)
                 {
-                    return k;
+                    if (k > MaxMatrixHeight)
+                        Console.WriteLine($"K должно быть <= {MaxMatrixHeight}");
+                    else
+                        return k;
+                }
+                else
+                {
+                    Console.WriteLine("K неотрицательно");
                 }
             } while (true);
-            
         }
 
         private static void ShowMenu()
-        {        
+        {
             Console.WriteLine("Нажмите соответствующую клавишу для выбора:");
             Console.WriteLine("1) Задать из консоли");
             Console.WriteLine("2) Задать из файла");
@@ -104,66 +101,67 @@ namespace GaussMethod
                 Console.WriteLine(ex.Message);
                 return null;
             }
-            if (min > max || NumericComparer.Compare(min,max))
-            {
-                Console.WriteLine("Максимальное значение должно быть строго больше минимального");
-                return null;
-            }
-            return new Matrix(RandomGenerator(k, min, max));
+
+            if (!(min > max) && !NumericComparer.Compare(min, max)) return new Matrix(RandomGenerator(k, min, max));
+            Console.WriteLine("Максимальное значение должно быть строго больше минимального");
+            return null;
+
         }
 
         private static Matrix FileInput(int k)
         {
             Console.WriteLine("Введите путь к файлу");
-            string fileName = "input.txt";
-            //string fileName = Console.ReadLine();
-            if (!File.Exists(fileName))
+            var fileName = Console.ReadLine();
+            if (fileName == null || !File.Exists(fileName))
             {
                 Console.WriteLine("Файл не существует");
                 return null;
             }
+
             using (var sr = new StreamReader(fileName))
             {
-                string source = sr.ReadToEnd();
-                Matrix result = Matrix.Parse(source, k, out string message);
-                if (!string.IsNullOrEmpty(message))
-                {
-                    Console.WriteLine(message);
-                }
-                return result;
+                var source = sr.ReadToEnd();
+                return HandleMatrixParse(source, k);
             }
         }
 
         private static Matrix ConsoleInput(int k)
         {
             var matrixString = new StringBuilder();
-            for (int i = 0; i < k; i++)
+            for (var i = 0; i < k; i++)
             {
                 Console.WriteLine($"Введите уравнение №{i} ");
                 matrixString.Append(Console.ReadLine());
                 matrixString.Append(' ');
             }
-            Matrix result = Matrix.Parse(matrixString.ToString(), k, out string message);
-            if (!string.IsNullOrEmpty(message))
-            {
-                Console.WriteLine(message);
-            }
-            return result;
+            return HandleMatrixParse(matrixString.ToString(), k);
+            
         }
 
         private static double[,] RandomGenerator(int size, double min, double max)
         {
-            Random rgen = new Random();
-            double[,] randomMatrix = new double[size, size + 1];
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size + 1; j++)
-                {
-                    randomMatrix[i,j] = rgen.NextDouble() * (max - min) + min;
-                }
-            }
+            var gen = new Random();
+            var randomMatrix = new double[size, size + 1];
+            for (var i = 0; i < size; i++)
+            for (var j = 0; j < size + 1; j++)
+                randomMatrix[i, j] = gen.NextDouble() * (max - min) + min;
             return randomMatrix;
         }
 
+        private static Matrix HandleMatrixParse(string source, int k)
+        {
+            Matrix result;
+            try
+            {
+                result = Matrix.Parse(source, k);
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+
+            return result;
+        }
     }
 }
