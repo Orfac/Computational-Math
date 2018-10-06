@@ -5,6 +5,7 @@ namespace Lab1
 {
     public class Matrix
     {
+        
         private readonly double[,] _matrix;
 
         public Matrix(double[,] matrix)
