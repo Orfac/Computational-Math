@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lab1
 {
-    internal class Program
+    class Program
     {
         private const int MaxMatrixHeight = 20;
 
