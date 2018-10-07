@@ -1,8 +1,8 @@
-namespace Lab2
+namespace Lab2.Functions
 {
     public class SquareFunction : Function
     {
-        public override decimal GetY(decimal x)
+        public override double GetY(double x)
         {
             return x * x;
         }

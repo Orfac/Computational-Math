@@ -1,8 +1,8 @@
-namespace Lab2
+namespace Lab2.Functions
 {
     public abstract class Function
     {
-        public abstract decimal GetY(decimal x);
+        public abstract double GetY(double x);
 
         public abstract override string ToString();
 
