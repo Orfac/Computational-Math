@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection.Metadata.Ecma335;
+using Lab2.Functions;
 
 namespace Lab2
 {
@@ -9,9 +10,13 @@ namespace Lab2
         {
             var io = new IO();
             var functions = InitializeFunctions();
+            
             var function = io.SelectFunction(functions);
+            var leftLimit = io.SelectLeftLimit();
+            var rightLimit = io.SelectRightLimit();
+            
             var solver = new Solver(function);
-            Console.WriteLine(solver.GetSolution(5, 10, (decimal) 0.1).ToString("0.#######"));
+            Console.WriteLine(solver.GetSolution(leftLimit, rightLimit).ToString("0.#######"));
         }
 
         private static Function[] InitializeFunctions()
@@ -19,9 +24,10 @@ namespace Lab2
             return new Function[]
             {
                 new SquareFunction(), 
-                new SquareFunction(),
-                new SquareFunction(),
-                new SquareFunction()
+                new DoubleXFunction(),
+                new SqrtFunction(), 
+                new TripleXFunction(),
+                new DoubleXFunction()
             };
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using Lab2.Functions;
 
 namespace Lab2
 {
@@ -10,13 +11,18 @@ namespace Lab2
         {
             _function = function;
         }
-
-        public decimal GetSolution(decimal a, decimal b, decimal accuracy)
+        /// <summary>
+        /// Calculates integral from a to b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public double GetSolution(double a, double b)
         {
-            decimal middleValue = (a + b) / 2;
-            decimal firstMultiplier = (b - a) / 6;
+            double middleValue = (a + b) / 2;
+            double firstMultiplier = (b - a) / 6;
             
-            decimal secondMultiplier = _function.GetY(a);      
+            double secondMultiplier = _function.GetY(a);      
             secondMultiplier += 4 * _function.GetY(middleValue);
             secondMultiplier += _function.GetY(b);
             

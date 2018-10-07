@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
+using Lab2.Functions;
 
 namespace Lab2
 {
@@ -13,7 +15,7 @@ namespace Lab2
             {
                 try
                 {
-                    function = TrySelectFunction(functions);
+                    function = SelectFunctionDialog(functions);
                     isSelected = true;
                 }
                 catch (FormatException)
@@ -30,7 +32,50 @@ namespace Lab2
             return function;
         }
 
-        private static Function TrySelectFunction(Function[] functions)
+        public double SelectLeftLimit()
+        {
+            do
+            {
+                try
+                {
+                    return SelectLimitDialog("Введите левый предел интегрирования");                 
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Необходимо ввести вещественное число");
+                }
+                
+            } while (true);
+            
+        }
+        
+        public double SelectRightLimit()
+        {
+            return SelectLimitDialog("Введите правый предел интегрирования");
+        }
+        
+        private double SelectLimitDialog(string message)
+        {
+            do
+            {
+                Console.WriteLine(message);
+                try
+                {
+                    return SelectLimitDialog(message);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Ошибка: Необходимо ввести вещественное число");
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Ошибка: число не помещается в размер типа double");
+                }
+                
+            } while (true);
+        }
+        
+        private static Function SelectFunctionDialog(Function[] functions)
         {
             Console.WriteLine("Выберите функцию:");
             for (var i = 0; i < functions.Length; i++)
@@ -45,7 +90,8 @@ namespace Lab2
             }
             else
             {
-                throw new InvalidDataException("Номер функции находится в интервале");
+                throw new InvalidDataException
+                    ($"Ошибка: Номер функции находится в интервале [1, {functions.Length}]");
             }
         }
     }
