@@ -31,13 +31,13 @@ namespace Lab1
                 var errors = matrix.GetErrors(solutions);
                 Console.WriteLine("Решения и невязки");
                 for (var i = 0; i < solutions.Length; i++)
-                    Console.WriteLine($"X{i+1}: {solutions[i]} | error: {errors[i]} ");
+                    Console.WriteLine($"X{i+1}: {solutions[i]:0.#######} | error: {errors[i]} ");
             }
 
             Console.Write("Определитель матрицы: ");
-            Console.WriteLine(matrix.GetDeterminant());
+            Console.WriteLine(matrix.GetDeterminant().ToString("0.#######"));
         }
-
+        
         private static Matrix InputMatrix()
         {
             var k = AskCount();
@@ -89,22 +89,33 @@ namespace Lab1
         private static Matrix RandomInput(int k)
         {
             double min, max;
-            Console.WriteLine("Введите минимальное значение");
-            try
+            var isInputParamsCorrect = false;
+            do
             {
-                min = double.Parse(Console.ReadLine());
-                Console.WriteLine("Введите максимальное значение");
-                max = double.Parse(Console.ReadLine());
-            }
-            catch (FormatException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
+                Console.WriteLine("Введите минимальное значение");
+                try
+                {
+                    min = double.Parse(Console.ReadLine());
+                    Console.WriteLine("Введите максимальное значение");
+                    max = double.Parse(Console.ReadLine());
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
 
-            if (!(min > max) && !NumericComparer.Compare(min, max)) return new Matrix(RandomGenerator(k, min, max));
-            Console.WriteLine("Максимальное значение должно быть строго больше минимального");
-            return null;
+                if (!(min > max) && !NumericComparer.Compare(min, max))
+                {
+                    isInputParamsCorrect = true;
+                }
+                else
+                {
+                    Console.WriteLine("Максимальное значение должно быть строго больше минимального");
+                }
+            } while (!isInputParamsCorrect);
+            
+            return new Matrix(RandomGenerator(k, min, max));    
 
         }
 

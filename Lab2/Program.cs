@@ -16,7 +16,7 @@ namespace Lab2
             var rightLimit = io.SelectRightLimit();
 
             var solver = new Solver();
-            Console.WriteLine(solver.GetSolution(leftLimit, rightLimit).ToString("0.#######"));
+          //  Console.WriteLine(solver.GetSolution(leftLimit, rightLimit).ToString("0.#######"));
         }
 
         private static Function[] InitializeFunctions()
