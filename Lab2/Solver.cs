@@ -33,7 +33,7 @@ namespace Lab2
                 integral += GetSingleIntegral(aI, aI + accuracy, func);
             }
 
-            if (!NumericComparer.Compare(offset + accuracy, b)) ;
+            if (!NumericComparer.Compare(offset + accuracy, b)) 
             {
                 integral += GetSingleIntegral(a + offset + accuracy, b, func);
             }
