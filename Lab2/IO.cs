@@ -32,6 +32,18 @@ namespace Lab2
             return function;
         }
 
+        internal void PrintException(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        public void PrintSolution(Solution solution)
+        {
+            Console.WriteLine($"Значение интеграла: {solution.Integral}");
+            Console.WriteLine($"Кол-во разбиений: {solution.Count}");
+            Console.WriteLine($"Погрешность: {solution.Error}");
+        }
+
         public double SelectAccuracy() => 
             SelectParameterDialog("Введите точность измерения");
 
