@@ -34,19 +34,7 @@ namespace Lab2
 
         public double SelectLeftLimit()
         {
-            do
-            {
-                try
-                {
-                    return SelectLimitDialog("Введите левый предел интегрирования");                 
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Необходимо ввести вещественное число");
-                }
-                
-            } while (true);
-            
+            return SelectLimitDialog("Введите левый предел интегрирования");                 
         }
         
         public double SelectRightLimit()
@@ -61,7 +49,8 @@ namespace Lab2
                 Console.WriteLine(message);
                 try
                 {
-                    return SelectLimitDialog(message);
+                    var input = Console.ReadLine();
+                    return double.Parse(input);
                 }
                 catch (FormatException)
                 {
@@ -83,7 +72,8 @@ namespace Lab2
                 Console.WriteLine($"{i + 1}) F(x) = {functions[i]}");
             }
 
-            var funcNumber = Int32.Parse(Console.ReadLine());
+            var input = Console.ReadLine();
+            var funcNumber = int.Parse(input);
             if (0 < funcNumber && funcNumber <= functions.Length)
             {
                 return functions[funcNumber - 1];

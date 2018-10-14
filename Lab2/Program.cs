@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reflection.Metadata.Ecma335;
+
 using Lab2.Functions;
 
 namespace Lab2
@@ -16,6 +16,7 @@ namespace Lab2
             var rightLimit = io.SelectRightLimit();
 
             var solver = new Solver();
+          
           //  Console.WriteLine(solver.GetSolution(leftLimit, rightLimit).ToString("0.#######"));
         }
 

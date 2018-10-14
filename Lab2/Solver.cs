@@ -46,7 +46,7 @@ namespace Lab2
             return integral;
         }
 
-        public double GetSingleIntegral(double a, double b, Func<double, double> func)
+        private double GetSingleIntegral(double a, double b, Func<double, double> func)
         {
             double middleValue = (a + b) / 2;
             double firstMultiplier = (b - a) / 6;
