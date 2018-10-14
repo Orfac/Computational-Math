@@ -14,10 +14,11 @@ namespace Lab2
             var function = io.SelectFunction(functions);
             var leftLimit = io.SelectLeftLimit();
             var rightLimit = io.SelectRightLimit();
+            var accurasy = io.SelectAccuracy();
 
             var solver = new Solver();
-          
-          //  Console.WriteLine(solver.GetSolution(leftLimit, rightLimit).ToString("0.#######"));
+            var solution = solver.GetSolution(leftLimit, rightLimit,function,accurasy);
+            Console.WriteLine(solution);
         }
 
         private static Function[] InitializeFunctions()
