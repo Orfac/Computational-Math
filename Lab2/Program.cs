@@ -10,15 +10,33 @@ namespace Lab2
         {
             var io = new IO();
             var functions = InitializeFunctions();
+            var solver = new Solver();
             
             var function = io.SelectFunction(functions);
             var leftLimit = io.SelectLeftLimit();
             var rightLimit = io.SelectRightLimit();
+
             var accurasy = io.SelectAccuracy();
 
-            var solver = new Solver();
-            var solution = solver.GetSolution(leftLimit, rightLimit,function,accurasy);
-            Console.WriteLine(solution);
+           
+            Solution solution;
+            try
+            {
+                solution = solver.GetSolution(function, leftLimit, rightLimit,accurasy);
+            } 
+            catch(OverflowException ex) 
+            {
+                io.PrintException(ex.Message);
+                return;
+            }
+            catch(NullReferenceException ex)
+            {
+                io.PrintException(ex.Message);
+                return;
+            }
+            
+            io.PrintSolution(solution);
+            
         }
 
         private static Function[] InitializeFunctions()
@@ -32,5 +50,6 @@ namespace Lab2
                 new FullSquareFunction()
             };
         }
+        
     }
 }
