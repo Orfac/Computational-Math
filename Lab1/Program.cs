@@ -141,7 +141,7 @@ namespace Lab1
             var matrixString = new StringBuilder();
             for (var i = 0; i < k; i++)
             {
-                Console.WriteLine($"Введите уравнение №{i} ");
+                Console.WriteLine($"Введите коэффициенты уравнения №{i+1} ");
                 matrixString.Append(Console.ReadLine());
                 matrixString.Append(' ');
             }
