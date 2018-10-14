@@ -29,7 +29,7 @@ namespace Lab2
                 new DoubleXFunction(),
                 new SqrtFunction(), 
                 new TripleXFunction(),
-                new DoubleXFunction()
+                new FullSquareFunction()
             };
         }
     }
