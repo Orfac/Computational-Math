@@ -5,6 +5,8 @@ namespace Lab2
 {
     public class Solver
     {
+        private const int MinimalSplitNumber = 100;
+        private const double RungeCoefficient = 1/15;
         /// <summary>
         /// Считает интеграл между выбранными значениями с необходимой точностью
         /// </summary>
@@ -12,43 +14,66 @@ namespace Lab2
         /// <param name="b">Верхний предел</param>
         /// <param name="func">Функция для интегрирования </param>
         /// <param name="accuracy">Точность</param>
-        /// <returns>Численное значение интеграла</returns>
-        public double GetSolution(double bottomLimit, double topLimit, 
-            Function func, double accuracy)
+        /// <returns></returns>
+        public Solution GetSolution(
+            Function func, double a, double b, double accuracy)
         {
-            var a = bottomLimit;
-            var b = topLimit;
+            if (func == null) throw new NullReferenceException("Функция не задана");
+            if (NumericComparer.Compare(a,b)) return new Solution
+            {
+                Integral = 0,
+                Count = 0,
+                Error = 0
+            };
+
             var isUnfolded = b < a;
             if (isUnfolded)
             {
                 (a, b) = (b, a);
             }
-            
-            double integral = 0;
-            var length = b - a;
-            var iterationCount = length / accuracy;
 
-            if (NumericComparer.Compare(iterationCount,0)) 
-                return GetSingleIntegral(a,b,func);
-
-            for (var i = 0.0; !(NumericComparer.Compare(i,length) || i > length); i += accuracy){
-                integral += GetSingleIntegral(a + i, b, func);
-            }             
+            int n = MinimalSplitNumber;
+            double integral = GetSplitedIntegral(a,b,n,func);
+            double doubleNIntegral = GetSplitedIntegral(a,b,n*2, func);
+            double error = RungeCoefficient * Math.Abs(integral - doubleNIntegral);
+            while (error > accuracy)
+            {
+                n *= 2;
+                if (n*2 == int.MaxValue) throw new OverflowException("Невозможно получить решение с заданной точностью");
+                integral = GetSplitedIntegral(a,b,n,func);
+                error = RungeCoefficient * Math.Abs(integral - GetSplitedIntegral(a,b,n*2,func));
+            }
 
             if (isUnfolded)
             {
                 integral *= (-1);
             }
 
+            return (integral: integral, count: n, error: error);
+        }
+
+        private double GetSplitedIntegral(double a, double b, int n, Function func)
+        {
+            double length = b - a;
+            double step = length / n;
+
+            double integral = 0;
+            for (double offset = 0; offset + step < length; offset += step)
+            {
+                double leftLimit = a + offset;
+                double rightLimit = leftLimit + step;
+                integral += GetSingleIntegral(leftLimit, rightLimit, func);
+            }
             return integral;
         }
 
         private double GetSingleIntegral(double a, double b, Function func)
         {
-            double middleValue = (a + b) / 2;
-            double firstMultiplier = (b - a) / 6;
             
-            double secondMultiplier = func.GetY(a);      
+            double firstMultiplier = (b - a) / 6;        
+            double secondMultiplier = func.GetY(a);
+
+            double middleValue = (a + b) / 2;
             secondMultiplier += 4 * func.GetY(middleValue);
             secondMultiplier += func.GetY(b);
             
