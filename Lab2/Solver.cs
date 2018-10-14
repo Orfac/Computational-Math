@@ -49,7 +49,12 @@ namespace Lab2
                 integral *= (-1);
             }
 
-            return (integral: integral, count: n, error: error);
+            return new Solution
+            {
+                Integral = integral,
+                Count = n,
+                Error = error
+            };
         }
 
         private double GetSplitedIntegral(double a, double b, int n, Function func)
