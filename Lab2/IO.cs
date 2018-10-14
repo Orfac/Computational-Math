@@ -24,7 +24,7 @@ namespace Lab2
                 }
                 catch (InvalidDataException e)
                 {
-                    Console.WriteLine(e);
+                    Console.WriteLine(e.Message);
                 }
                 
             } while (!isSelected);
@@ -32,17 +32,16 @@ namespace Lab2
             return function;
         }
 
-        public double SelectLeftLimit()
-        {
-            return SelectLimitDialog("Введите левый предел интегрирования");                 
-        }
+        public double SelectAccuracy() => 
+            SelectParameterDialog("Введите точность измерения");
+
+       public double SelectLeftLimit() => 
+            SelectParameterDialog("Введите левый предел интегрирования");
         
-        public double SelectRightLimit()
-        {
-            return SelectLimitDialog("Введите правый предел интегрирования");
-        }
+        public double SelectRightLimit() => 
+            SelectParameterDialog("Введите правый предел интегрирования");
         
-        private double SelectLimitDialog(string message)
+        private double SelectParameterDialog(string message)
         {
             do
             {
