@@ -12,9 +12,9 @@ namespace Lab2
         /// <param name="b">Верхний предел</param>
         /// <param name="func">Функция для интегрирования </param>
         /// <param name="accuracy">Точность</param>
-        /// <returns></returns>
+        /// <returns>Численное значение интеграла</returns>
         public double GetSolution(double bottomLimit, double topLimit, 
-            Func<double,double> func, double accuracy)
+            Function func, double accuracy)
         {
             var a = bottomLimit;
             var b = topLimit;
@@ -26,17 +26,14 @@ namespace Lab2
             
             double integral = 0;
             var length = b - a;
-            double offset;
-            for (offset = 0; offset + accuracy < length; offset += accuracy )
-            {
-                var aI = a + offset;
-                integral += GetSingleIntegral(aI, aI + accuracy, func);
-            }
+            var iterationCount = length / accuracy;
 
-            if (!NumericComparer.Compare(offset + accuracy, b)) 
-            {
-                integral += GetSingleIntegral(a + offset + accuracy, b, func);
-            }
+            if (NumericComparer.Compare(iterationCount,0)) 
+                return GetSingleIntegral(a,b,func);
+
+            for (var i = 0.0; !(NumericComparer.Compare(i,length) || i > length); i += accuracy){
+                integral += GetSingleIntegral(a + i, b, func);
+            }             
 
             if (isUnfolded)
             {
@@ -46,14 +43,14 @@ namespace Lab2
             return integral;
         }
 
-        private double GetSingleIntegral(double a, double b, Func<double, double> func)
+        private double GetSingleIntegral(double a, double b, Function func)
         {
             double middleValue = (a + b) / 2;
             double firstMultiplier = (b - a) / 6;
             
-            double secondMultiplier = func(a);      
-            secondMultiplier += 4 * func(middleValue);
-            secondMultiplier += func(b);
+            double secondMultiplier = func.GetY(a);      
+            secondMultiplier += 4 * func.GetY(middleValue);
+            secondMultiplier += func.GetY(b);
             
             return firstMultiplier * secondMultiplier;
         }
