@@ -8,12 +8,14 @@ namespace Lab1
         {
             var gen = new Random();           
             var height = size;
-            var length = size + 1;
-            var randomMatrix = new double[height, length];
+            var width = size + 1;
+            var randomMatrix = new double[height, width];
+            var interval = max - min;
             
             for (var i = 0; i < height; i++)
-                for (var j = 0; j < length; j++)
-                    randomMatrix[i, j] = gen.NextDouble() * (max - min) + min;
+                for (var j = 0; j < width; j++)
+                    randomMatrix[i, j] = gen.NextDouble() * interval + min;
+            
             return randomMatrix;
         }
     }
