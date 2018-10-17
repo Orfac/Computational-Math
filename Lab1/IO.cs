@@ -41,7 +41,7 @@ namespace Lab1
                 }
                 else
                 {
-                    Console.WriteLine("Ошиба: K неотрицательно");
+                    Console.WriteLine("Ошибка: K неотрицательно");
                 }
             } while (true);
         }
