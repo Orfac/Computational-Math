@@ -33,8 +33,8 @@ namespace Lab2
             }
 
             int n = MinimalSplitNumber;
-            double integral = GetSplittedIntegral(a,b,n,func);
-            double doubleNIntegral = GetSplittedIntegral(a,b,n*2, func);
+            double integral = GetDistributedIntegral(a,b,n,func);
+            double doubleNIntegral = GetDistributedIntegral(a,b,n*2, func);
             double error = RungeCoefficient * Math.Abs(integral - doubleNIntegral);
             
             while (error > accuracy)
@@ -45,8 +45,8 @@ namespace Lab2
                     throw new OverflowException 
                         ("Невозможно получить решение с заданной точностью");
                 }           
-                integral = GetSplittedIntegral(a,b,n,func);
-                error = RungeCoefficient * Math.Abs(integral - GetSplittedIntegral(a,b,n*2,func));
+                integral = GetDistributedIntegral(a,b,n,func);
+                error = RungeCoefficient * Math.Abs(integral - GetDistributedIntegral(a,b,n*2,func));
             }
 
             if (isUnfolded)
@@ -62,7 +62,7 @@ namespace Lab2
             };
         }
 
-        private double GetSplittedIntegral(double a, double b, int n, Function func)
+        private double GetDistributedIntegral(double a, double b, int n, Function func)
         {
             double length = b - a;
             double step = length / n;
