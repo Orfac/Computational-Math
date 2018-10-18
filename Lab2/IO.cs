@@ -22,9 +22,9 @@ namespace Lab2
                 {
                     Console.WriteLine("Необходимо ввести число");
                 }
-                catch (InvalidDataException e)
+                catch (InvalidDataException ex)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ex.Message);
                 }
                 
             } while (!isSelected);
@@ -85,15 +85,14 @@ namespace Lab2
 
             var input = Console.ReadLine();
             var funcNumber = int.Parse(input);
-            if (0 < funcNumber && funcNumber <= functions.Length)
-            {
-                return functions[funcNumber - 1];
-            }
-            else
+            if (0 >= funcNumber || funcNumber > functions.Length)
             {
                 throw new InvalidDataException
                     ($"Ошибка: Номер функции находится в интервале [1, {functions.Length}]");
             }
+               
+            return functions[funcNumber - 1];
+
         }
     }
 }
