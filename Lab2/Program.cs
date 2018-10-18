@@ -16,13 +16,13 @@ namespace Lab2
             var leftLimit = io.SelectLeftLimit();
             var rightLimit = io.SelectRightLimit();
 
-            var accurasy = io.SelectAccuracy();
+            var accuracy = io.SelectAccuracy();
 
            
             Solution solution;
             try
             {
-                solution = solver.GetSolution(function, leftLimit, rightLimit,accurasy);
+                solution = solver.GetSolution(function, leftLimit, rightLimit,accuracy);
             } 
             catch(OverflowException ex) 
             {
