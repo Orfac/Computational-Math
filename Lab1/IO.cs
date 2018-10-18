@@ -6,24 +6,78 @@ namespace Lab1
 {
     public class IO
     {
+        private enum InputType
+        {
+            Console,
+            File,
+            Random
+        }
         public Matrix InputMatrixDialog(int maxMatrixHeight)
         {
+            var type = AskInputType();
             var k = AskCount(maxMatrixHeight);
-            ShowMenu();
+            return InputMatrix(type, k);
+        }
 
-            var choice = Console.ReadLine();
+        public void PrintMessage(string message) => Console.WriteLine(message);
+       
+        public void PrintSolvedMatrixInfo(Matrix matrix, double[] solutions, decimal[] errors)
+        {
+            Console.WriteLine("Треугольный вид");
+            Console.WriteLine(matrix);
+            Console.WriteLine("Решения и невязки");
+            for (var i = 0; i < solutions.Length; i++)
+                Console.WriteLine($"X{i+1}: {solutions[i]} | error: {errors[i]} ");
+            Console.Write("Определитель матрицы: ");
+            Console.WriteLine(matrix.GetDeterminant().ToString("0.#######"));
+        }
+        
+        private Matrix InputMatrix(InputType type, int k)
+        {
+            switch (type)
+            {
+                case InputType.Console:
+                    return ConsoleInput(k);
+                case InputType.File:
+                    return FileInput(k);
+                case InputType.Random:
+                    return RandomInput(k);
+                default:
+                    throw new InvalidDataException("Ошибка: Не удалось определить тип ввода матрицы");
+            }
+        }
+
+        private InputType AskInputType()
+        {
+            do
+            {
+                ShowMenu();
+                var choice = Console.ReadLine();
+                try
+                {
+                    return GetInputType(choice);                    
+                }
+                catch (InvalidCastException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            } while (true);
+        }
+
+        private InputType GetInputType(string choice)
+        {
             switch (choice)
             {
                 case "1":
-                    return ConsoleInput(k);
+                    return InputType.Console;
                 case "2":
-                    return FileInput(k);
+                    return InputType.File;
                 case "3":
-                    return RandomInput(k);
+                    return InputType.Random;
                 default:
-                    throw new InvalidDataException("Ошибка: выберите число в диапазоне от 1 до 3");
+                    throw new InvalidCastException("Ошибка: Введите число от 1 до 3");
             }
-        }     
+        }
 
         private int AskCount(int maxMatrixHeight)
         {
@@ -32,16 +86,14 @@ namespace Lab1
                 Console.WriteLine("-------------------------------------------");
                 Console.WriteLine("Введите размер матрицы k");
                 var isNumber = int.TryParse(Console.ReadLine(), out var k);
-                if (isNumber && k > 0)
+                if (!isNumber)
                 {
-                    if (k > maxMatrixHeight)
-                        Console.WriteLine($"Ошибка: K должно быть <= {maxMatrixHeight}");
-                    else
-                        return k;
+                    Console.WriteLine("Ошибка: Введено не целочисленное значение");
                 }
                 else
                 {
-                    Console.WriteLine("Ошибка: K неотрицательно");
+                    if (k > 0 && k < maxMatrixHeight) return k;
+                    Console.WriteLine($"Ошибка: Должно выполняться условие - 0 <= K <= {maxMatrixHeight}");
                 }
             } while (true);
         }
@@ -56,11 +108,11 @@ namespace Lab1
 
         private Matrix RandomInput(int k)
         {
-            double min, max;
-            var isInputParamsCorrect = false;
             do
             {
                 Console.WriteLine("Введите минимальное значение");
+                double max;
+                double min;
                 try
                 {
                     min = double.Parse(Console.ReadLine());
@@ -69,23 +121,17 @@ namespace Lab1
                 }
                 catch (FormatException ex)
                 {
-                    Console.WriteLine(ex.Message);
-                    return null;
+                    Console.WriteLine("Ошибка: Необходимо ввести число");
+                    continue;
                 }
 
                 if (!(min > max) && !NumericComparer.Compare(min, max))
                 {
-                    isInputParamsCorrect = true;
+                    var randomGenerator = new RandomMatrixGenerator();
+                    return new Matrix(randomGenerator.Generate(k, min, max));    
                 }
-                else
-                {
-                    Console.WriteLine("Максимальное значение должно быть строго больше минимального");
-                }
-            } while (!isInputParamsCorrect);
-
-            var randomGenerator = new RandomMatrixGenerator();
-            return new Matrix(randomGenerator.Generate(k, min, max));    
-
+                Console.WriteLine("Ошибка: Максимальное значение должно быть строго больше минимального");
+            } while (true);
         }
 
         private Matrix FileInput(int k)
@@ -125,13 +171,14 @@ namespace Lab1
             {
                 result = Matrix.Parse(source, k);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException ex)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ex.Message);
                 return null;
             }
 
             return result;
         }
+
     }
 }

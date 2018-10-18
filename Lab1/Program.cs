@@ -21,32 +21,31 @@ namespace Lab1
                 }
                 catch (InvalidDataException ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    io.PrintMessage(ex.Message);
                 }
                
                 
             } while (matrix == null);
 
-
-            Console.WriteLine(matrix);
+            io.PrintMessage("Исходная матрица:");
+            io.PrintMessage(matrix.ToString());
             var solver = new Solver();
-            var solutions = solver.Solve(matrix);
-            if (solutions == null)
+            double[] solutions;
+            try
             {
-                Console.WriteLine("Матрицу не удалось решить методом Гаусса");
+                solutions = solver.Solve(matrix);
             }
-            else
+            catch (ArgumentException ex)
             {
-                Console.WriteLine("Треугольный вид");
-                Console.WriteLine(matrix);
-                var errors = matrix.GetErrors(solutions);
-                Console.WriteLine("Решения и невязки");
-                for (var i = 0; i < solutions.Length; i++)
-                    Console.WriteLine($"X{i+1}: {solutions[i]} | error: {errors[i]} ");
+                io.PrintMessage(ex.Message);
+                return;
             }
+            
+            var errors = matrix.GetErrors(solutions);
+            io.PrintSolvedMatrixInfo(matrix, solutions, errors);
+            
 
-            Console.Write("Определитель матрицы: ");
-            Console.WriteLine(matrix.GetDeterminant().ToString("0.#######"));
+            
         }
         
         

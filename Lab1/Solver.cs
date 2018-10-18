@@ -15,28 +15,59 @@ namespace Lab1
                     " кол-во строк должно быть на 1 меньше, чем кол-во столбцов");
 
             if (!matrix.IsTriangular()) ToTriangular(ref matrix);
+            CheckZeroOrInfinitySolutions(matrix);
 
             return FindSolutions(matrix);
         }
 
-        private static double[] FindSolutions(Matrix matrix)
+        private void CheckZeroOrInfinitySolutions(Matrix matrix)
+        {
+            bool noSolutions = false;
+            bool infinitySolutions = false;
+            for (var i = 0; i < matrix.Height; i++)
+            {
+                bool isEquationCorrect = false;
+                for (var j = i; j < matrix.Width - 1; j++)
+                {
+                    if (!NumericComparer.Compare(matrix[i, j], 0)) isEquationCorrect = true;
+                }
+
+                if (isEquationCorrect) continue;
+                if (NumericComparer.Compare(matrix[i, matrix.Width - 1], 0))
+                {
+                    infinitySolutions = true;
+                }
+                else
+                {
+                    noSolutions = true;
+                }
+            }
+            if (noSolutions) throw new ArgumentException("Нет решений");
+            if (infinitySolutions) throw new ArgumentException("Бесконечное число решений");
+        }
+        
+        private double[] FindSolutions(Matrix matrix)
         {
             var height = matrix.Height;
             var width = matrix.Width;
             var solutions = new double[height];
-
+            
             for (var i = height - 1; i >= 0; i--)
             {
+                
                 // Запись числа из столбца значений
                 var x = matrix[i, width - 1];
-
+                
                 // Подставляем известные переменные
                 for (var j = i + 1; j < width - 1; j++)
                     x -= matrix[i, j] * solutions[j];
 
                 // Находим новую переменную поделив на коэффициент перед ней
                 x /= matrix[i, i];
-
+                if (double.IsNaN(x))
+                {
+                    throw new ArgumentException("");
+                }
                 // Записываем переменную в ответ
                 solutions[i] = x;
             }
