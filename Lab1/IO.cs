@@ -92,7 +92,7 @@ namespace Lab1
                 }
                 else
                 {
-                    if (k > 0 && k < maxMatrixHeight) return k;
+                    if (k > 0 && k <= maxMatrixHeight) return k;
                     Console.WriteLine($"Ошибка: Должно выполняться условие - 0 <= K <= {maxMatrixHeight}");
                 }
             } while (true);

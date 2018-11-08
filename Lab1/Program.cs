@@ -29,8 +29,9 @@ namespace Lab1
 
             io.PrintMessage("Исходная матрица:");
             io.PrintMessage(matrix.ToString());
+            
             var solver = new Solver();
-            double[] solutions;
+            double[] solutions;    
             try
             {
                 solutions = solver.Solve(matrix);
