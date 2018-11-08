@@ -23,13 +23,13 @@ namespace Lab1
        
         public void PrintSolvedMatrixInfo(Matrix matrix, double[] solutions, decimal[] errors)
         {
-            Console.WriteLine("Треугольный вид");
-            Console.WriteLine(matrix);
-            Console.WriteLine("Решения и невязки");
+            PrintMessage("Треугольный вид");
+            PrintMessage(matrix.ToString());
+            PrintMessage("Решения и невязки");
             for (var i = 0; i < solutions.Length; i++)
-                Console.WriteLine($"X{i+1}: {solutions[i]} | error: {errors[i]} ");
+                PrintMessage($"X{i+1}: {solutions[i]} | error: {errors[i]} ");
             Console.Write("Определитель матрицы: ");
-            Console.WriteLine(matrix.GetDeterminant().ToString("0.#######"));
+            PrintMessage(matrix.GetDeterminant().ToString("0.#######"));
         }
         
         private Matrix InputMatrix(InputType type, int k)
@@ -59,7 +59,7 @@ namespace Lab1
                 }
                 catch (InvalidCastException ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    PrintMessage(ex.Message);
                 }
             } while (true);
         }
@@ -83,45 +83,57 @@ namespace Lab1
         {
             do
             {
-                Console.WriteLine("-------------------------------------------");
-                Console.WriteLine("Введите размер матрицы k");
+                PrintMessage("-------------------------------------------");
+                PrintMessage("Введите размер матрицы k");
                 var isNumber = int.TryParse(Console.ReadLine(), out var k);
                 if (!isNumber)
                 {
-                    Console.WriteLine("Ошибка: Введено не целочисленное значение");
+                    PrintMessage("Ошибка: Введено не целочисленное значение");
                 }
                 else
                 {
                     if (k > 0 && k <= maxMatrixHeight) return k;
-                    Console.WriteLine($"Ошибка: Должно выполняться условие - 0 <= K <= {maxMatrixHeight}");
+                    PrintMessage($"Ошибка: Должно выполняться условие - 0 <= K <= {maxMatrixHeight}");
                 }
             } while (true);
         }
 
         private void ShowMenu()
         {
-            Console.WriteLine("Нажмите соответствующую клавишу для выбора:");
-            Console.WriteLine("1) Задать из консоли");
-            Console.WriteLine("2) Задать из файла");
-            Console.WriteLine("3) Задать случайно");
+            PrintMessage("Нажмите соответствующую клавишу для выбора:");
+            PrintMessage("1) Задать из консоли");
+            PrintMessage("2) Задать из файла");
+            PrintMessage("3) Задать случайно");
         }
 
         private Matrix RandomInput(int k)
         {
             do
             {
-                Console.WriteLine("Введите минимальное значение");
+                PrintMessage("Введите минимальное значение");
                 double max;
                 double min;
                 try
                 {
-                    min = double.Parse(Console.ReadLine());
-                    Console.WriteLine("Введите максимальное значение");
-                    max = double.Parse(Console.ReadLine());
+                    min = double.Parse(Console.ReadLine().Replace(',','.'));
+                    PrintMessage("Введите максимальное значение");
+                    max = double.Parse(Console.ReadLine().Replace(',','.'));
                 }
-                catch (FormatException ex)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Ошибка: Необходимо ввести число");
+                    if (ex is FormatException || ex is ArgumentNullException)
+                    {
+                        PrintMessage("Ошибка: Необходимо ввести число");
+                        continue;
+                    }
+
+                    if (ex is OverflowException)
+                        PrintMessage("Ошибка: Число слишком не входит в размер double");
+                    else
+                    {
+                        throw;
+                    }
+                    
                     continue;
                 }
 
@@ -130,17 +142,17 @@ namespace Lab1
                     var randomGenerator = new RandomMatrixGenerator();
                     return new Matrix(randomGenerator.Generate(k, min, max));    
                 }
-                Console.WriteLine("Ошибка: Максимальное значение должно быть строго больше минимального");
+                PrintMessage("Ошибка: Максимальное значение должно быть строго больше минимального");
             } while (true);
         }
 
         private Matrix FileInput(int k)
         {
-            Console.WriteLine("Введите путь к файлу");
+            PrintMessage("Введите путь к файлу");
             var fileName = Console.ReadLine();
             if (fileName == null || !File.Exists(fileName))
             {
-                Console.WriteLine("Файл не существует");
+                PrintMessage("Файл не существует");
                 return null;
             }
 
@@ -156,7 +168,7 @@ namespace Lab1
             var matrixString = new StringBuilder();
             for (var i = 0; i < k; i++)
             {
-                Console.WriteLine($"Введите коэффициенты уравнения №{i+1} ");
+                PrintMessage($"Введите коэффициенты уравнения №{i+1} ");
                 matrixString.Append(Console.ReadLine());
                 matrixString.Append(' ');
             } 
@@ -173,7 +185,7 @@ namespace Lab1
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine(ex.Message);
+                PrintMessage(ex.Message);
                 return null;
             }
 
