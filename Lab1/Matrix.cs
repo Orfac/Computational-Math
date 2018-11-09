@@ -99,7 +99,7 @@ namespace Lab1
             {
                 for (var j = 0; j < _matrix.GetLength(1); j++)
                 {
-                    result.Append(_matrix[i, j].ToString("0.#######"));
+                    result.Append(_matrix[i, j].ToString("E2"));
                     result.Append(' ');
                 }
 

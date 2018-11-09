@@ -15,6 +15,7 @@ namespace Lab1
                     " кол-во строк должно быть на 1 меньше, чем кол-во столбцов");
 
             if (!matrix.IsTriangular()) ToTriangular(ref matrix);
+            if (!matrix.IsTriangular()) throw new ArgumentException("Не удалось привести к треугольному виду");
             CheckZeroOrInfinitySolutions(matrix);
 
             return FindSolutions(matrix);
@@ -26,7 +27,7 @@ namespace Lab1
             bool infinitySolutions = false;
             for (var i = 0; i < matrix.Height; i++)
             {
-                bool isEquationCorrect = false;
+                var isEquationCorrect = false;
                 for (var j = i; j < matrix.Width - 1; j++)
                 {
                     if (!NumericComparer.Compare(matrix[i, j], 0)) isEquationCorrect = true;
