@@ -27,9 +27,9 @@ namespace Lab1
             PrintMessage(matrix.ToString());
             PrintMessage("Решения и невязки");
             for (var i = 0; i < solutions.Length; i++)
-                PrintMessage($"X{i+1}: {solutions[i]} | error: {errors[i]} ");
+                PrintMessage($"X{i+1}: {solutions[i]:E2} | error: {errors[i]:E2} ");
             Console.Write("Определитель матрицы: ");
-            PrintMessage(matrix.GetDeterminant().ToString("0.#######"));
+            PrintMessage(matrix.GetDeterminant().ToString("E2"));
         }
         
         private Matrix InputMatrix(InputType type, int k)
