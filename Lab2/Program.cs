@@ -46,7 +46,7 @@ namespace Lab2
                 new SquareFunction(), 
                 new DoubleXFunction(),
                 new SqrtFunction(), 
-                new TripleXFunction(),
+                new Hyperbola(),
                 new FullSquareFunction()
             };
         }

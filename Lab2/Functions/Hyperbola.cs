@@ -1,15 +1,15 @@
 namespace Lab2.Functions
 {
-    public class TripleXFunction : Function
+    public class Hyperbola : Function
     {
         public override double GetY(double x)
         {
-            return 3 * x;
+            return 1 / x;
         }
 
         public override string ToString()
         {
-            return "3x";
+            return "1/x";
         }
     }
 }

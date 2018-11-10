@@ -39,9 +39,9 @@ namespace Lab2
 
         public void PrintSolution(Solution solution)
         {
-            Console.WriteLine($"Значение интеграла: {solution.Integral}");
+            Console.WriteLine($"Значение интеграла: {solution.Integral:e2}");
             Console.WriteLine($"Кол-во разбиений: {solution.Count}");
-            Console.WriteLine($"Погрешность: {solution.Error}");
+            Console.WriteLine($"Погрешность: {solution.Error:e2}");
         }
 
         public double SelectAccuracy() => 

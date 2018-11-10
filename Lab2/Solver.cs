@@ -5,7 +5,7 @@ namespace Lab2
 {
     public class Solver
     {
-        private const int MinimalSplitNumber = 100;
+        private const int MinimalSplitNumber = 5;
         private const double RungeCoefficient = 1/15;
         /// <summary>
         /// Считает интеграл между выбранными значениями с необходимой точностью
@@ -33,21 +33,25 @@ namespace Lab2
             }
 
             int n = MinimalSplitNumber;
-            double integral = GetDistributedIntegral(a,b,n,func);
-            double doubleNIntegral = GetDistributedIntegral(a,b,n*2, func);
+            int n2 = n * 2;
+            double integral = GetSlice(a,b,n2,func);
+            double doubleNIntegral = GetSlice(a,b,n2*2, func);
             double error = RungeCoefficient * Math.Abs(integral - doubleNIntegral);
             
             while (error > accuracy)
             {
-                n *= 2;
-                if (n * 2 == int.MaxValue)
-                {
+                n2 *= 2;
+                if (n2 * 2 > 10000)
                     throw new OverflowException 
-                        ("Невозможно получить решение с заданной точностью");
-                }           
-                integral = GetDistributedIntegral(a,b,n,func);
-                error = RungeCoefficient * Math.Abs(integral - GetDistributedIntegral(a,b,n*2,func));
+                        ("Ошибка: Не удалось посчитать интеграл с заданной точностью");  
+
+                integral = GetSlice(a,b,n2,func);
+                error = RungeCoefficient * Math.Abs(integral - GetSlice(a,b,n2*2,func));
             }
+            
+            if (!double.IsFinite(integral))
+                throw new OverflowException
+                    ("Ошибка: Интеграл имеет разрыв на этом промежутке");
 
             if (isUnfolded)
             {
@@ -57,37 +61,35 @@ namespace Lab2
             return new Solution
             {
                 Integral = integral,
-                Count = n,
+                Count = n2,
                 Error = error
             };
         }
 
-        private double GetDistributedIntegral(double a, double b, int n, Function func)
+        private double GetSlice(double a, double b, int n2, Function func)
         {
-            double length = b - a;
-            double step = length / n;
+            double h = (b - a) / n2;
+            int n = n2 / 2;
 
-            double integral = 0;
-            for (double offset = 0; offset + step < length; offset += step)
+            double integral = func.GetY(a) + func.GetY(b);
+
+            double oddSum = 0;
+            for (int i = 1; i <= n; i++)
             {
-                double leftLimit = a + offset;
-                double rightLimit = leftLimit + step;
-                integral += GetSingleIntegral(leftLimit, rightLimit, func);
+                double ai = a + (2 * i - 1) * h;
+                oddSum += func.GetY(ai);
             }
+
+            double evenSum = 0;
+            for (int i = 1; i < n; i++)
+            {
+                double ai = a + 2 * i * h;
+                evenSum += func.GetY(ai);
+            }
+
+            integral = (integral + 4 * oddSum + 2 * evenSum) * h / 3;
             return integral;
         }
 
-        private double GetSingleIntegral(double a, double b, Function func)
-        {
-            
-            double firstMultiplier = (b - a) / 6;        
-            double secondMultiplier = func.GetY(a);
-
-            double middleValue = (a + b) / 2;
-            secondMultiplier += 4 * func.GetY(middleValue);
-            secondMultiplier += func.GetY(b);
-            
-            return firstMultiplier * secondMultiplier;
-        }
     }
 }
