@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
+using Lab3.Services.Methods;
 namespace Lab3
 {
     public class Startup
@@ -15,6 +16,7 @@ namespace Lab3
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IInterpolationMethod,LagrangeMethod>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,30 +31,22 @@ namespace Lab3
             app.UseStaticFiles();
             app.Map("", home => 
             {
-                home.Map("/index",Index);
-                home.Map("/about",About);
+                home.Map("/Interpolate",Interpolate);
             });
 
             app.Run(async (context) => 
             {
-                 await context.Response.WriteAsync("Wrong page"); 
+                await context.Response.WriteAsync("hi"); 
             });
         }
 
 
-        public static void Index(IApplicationBuilder app)
+        public static void Interpolate(IApplicationBuilder app)
         {
             app.Run(async context =>
             {
                 await context.Response.WriteAsync("Index");
             });
-        }
-        public static void About(IApplicationBuilder app)
-        {
-            app.Run(async context => 
-            {
-                await context.Response.WriteAsync("About");
-            });
-        }
+        }     
     }
 }

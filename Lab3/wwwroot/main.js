@@ -18,7 +18,7 @@ function Draw(points) {
 		animationEnabled: true,
 		theme: "light2",
 		title:{
-			text: "График функции"
+			text: ""
 		},
 		axisY:{
 			includeZero: false
