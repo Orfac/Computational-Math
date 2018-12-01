@@ -24,8 +24,35 @@ namespace Lab3
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.Map("", home => 
+            {
+                home.Map("/index",Index);
+                home.Map("/about",About);
+            });
 
-            app.Run(async (context) => { await context.Response.WriteAsync("Hello World! guys"); });
+            app.Run(async (context) => 
+            {
+                 await context.Response.WriteAsync("Wrong page"); 
+            });
+        }
+
+
+        public static void Index(IApplicationBuilder app)
+        {
+            app.Run(async context =>
+            {
+                await context.Response.WriteAsync("Index");
+            });
+        }
+        public static void About(IApplicationBuilder app)
+        {
+            app.Run(async context => 
+            {
+                await context.Response.WriteAsync("About");
+            });
         }
     }
 }

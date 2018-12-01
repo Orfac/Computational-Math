@@ -1,0 +1,23 @@
+.info-label{
+    text-align: center;
+}
+
+footer .info-label{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:60px;   /* Height of the footer */
+}
+
+body {
+    margin:0;
+    padding:0;
+    height:100%;
+ }
+
+.main-component{
+    margin:0 auto;
+    width: 800px;
+}
+
+
