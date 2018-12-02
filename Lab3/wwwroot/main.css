@@ -15,9 +15,32 @@ body {
     height:100%;
  }
 
-.main-component{
-    margin:0 auto;
-    width: 800px;
+.main-component-layout{
+    width: 100%;
 }
 
+.main-component{
+    float: left;
+    text-align:center;
+    margin-left: auto;
+    margin-right: 100px;
+    margin-left: 100px;
+}
 
+button {
+    background-color: rgb(101, 110, 235);
+    border: none;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(64, 64, 206);
+}
+
+.point-elem{
+    display: inline-block;
+}

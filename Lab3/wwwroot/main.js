@@ -9,7 +9,7 @@ var points = [
 	{ y: 480,x: 3 },
 	{ y: 410,x: 3 },
 	{ y: 500,x: 3 },
-	{ y: 480,x: 3 },
+	{ y: 480,x: 9 },
 	{ y: 510,x: 3 }
 ];
 
@@ -34,3 +34,13 @@ function Draw(points) {
 window.onload = function () {
 	Draw(points);
 }	
+
+function interpolate() {
+	$.ajax({
+		type: 'POST',
+		url: "Interpolate",
+		data: { 'X': 5, 'Y': 6, 'R': 7, 'IsAjax': true},
+		success: function (data,textStatus, xhr) { console.log(data)},
+		error: function (a, jqXHR, exception) { }
+	});
+}
