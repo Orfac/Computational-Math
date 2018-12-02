@@ -11,9 +11,14 @@ namespace Lab3.Services.Functions
             _functions = new List<IFunction>();
         }
 
+        public void addFunction(IFunction function)
+        {
+            _functions.Add(function);
+        }
+
         public IFunction GetFunction(int number)
         {
-            
+            return _functions[number];
         }
     }
 }
