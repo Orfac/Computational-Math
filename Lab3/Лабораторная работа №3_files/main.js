@@ -36,11 +36,12 @@ window.onload = function () {
 }	
 
 function interpolate() {
-	let xData = $('#xData')[0].value;
+	
+
 	$.ajax({
 		type: 'GET',
 		url: "Interpolate",
-		data: { 'xData': xData},
+		data: { 'xData': xData, 'yData': yData},
 		success: function (data,textStatus, xhr) { console.log(data)},
 		error: function (a, jqXHR, exception) { }
 	});

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 using Lab3.Services.Methods;
+using Lab3.Services.Parsers;
+using System.IO;
+
 namespace Lab3
 {
     public class Startup
@@ -17,6 +16,7 @@ namespace Lab3
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IInterpolationMethod,LagrangeMethod>();
+            services.AddTransient<IParser,Parser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,25 +26,20 @@ namespace Lab3
             {
                 app.UseDeveloperExceptionPage();
             }
-            
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.Map("", home => 
-            {
-                home.Map("/Interpolate",Interpolate);
-            });
-
-            app.Run(async (context) => 
-            {
-                await context.Response.WriteAsync("hi"); 
-            });
+            app.Map("/Interpolate", Interpolate);
         }
-
 
         public static void Interpolate(IApplicationBuilder app)
         {
             app.Run(async context =>
             {
+                var cont = context;
+                Parser parser = new Parser();
+                string text = context.Request.Query["xData"];
+                double[] x = parser.parseArray(text);
+                
                 await context.Response.WriteAsync("Index");
             });
         }     
