@@ -1,8 +1,7 @@
 namespace Lab3.Services.Functions
 {
-    public interface IFunction
+    public interface IFunctionRepository
     {
-        string Name { get; }
-        double getY(double x);
+        IFunction GetFunction(int number);
     } 
 }
