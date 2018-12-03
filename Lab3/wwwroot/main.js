@@ -30,13 +30,13 @@ function interpolate() {
 		data: { 'xData': xData},
 		success: function (data,textStatus, xhr) {
 			let stringValues = data.split(" ");
-			let values = [];
-			for (let index = 0; index < stringValues.length; index++) {
-				values[index] = parseFloat(stringValues[index]);
-			}
 			points = [];
-			for (let i = 0; i < values.length; i++) {
-				let point = {'x': i, 'y': values[i]};
+
+			for (let index = 0; index < stringValues.length; index++) {
+				let x = parseFloat(stringValues[index]);
+				index++;
+				let y = parseFloat(stringValues[index]);
+				let point = {'x': x, 'y':y};
 				points.push(point);	
 			}
 			Draw(points);

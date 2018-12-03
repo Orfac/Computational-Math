@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Lab3.Services.Functions
+namespace Lab3.Models.Functions
 {
     public class FunctionRepository : IFunctionRepository
     {

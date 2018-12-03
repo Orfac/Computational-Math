@@ -1,6 +1,6 @@
 using System;
 
-namespace Lab3.Services.Functions
+namespace Lab3.Models.Functions
 {
     public class SquareFunction : IFunction
     {

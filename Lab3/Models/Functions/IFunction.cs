@@ -1,4 +1,4 @@
-namespace Lab3.Services.Functions
+namespace Lab3.Models.Functions
 {
     public interface IFunction
     {

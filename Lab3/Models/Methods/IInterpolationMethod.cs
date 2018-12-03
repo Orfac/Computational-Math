@@ -1,4 +1,4 @@
-namespace Lab3.Services.Methods
+namespace Lab3.Models.Methods
 {
     public interface IInterpolationMethod
     {

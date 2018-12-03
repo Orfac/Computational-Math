@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-
-using Lab3.Services.Methods;
 using Lab3.Services.Parsers;
 using System.IO;
-using Lab3.Services.Functions;
 using System.Text;
+using Lab3.Models.Methods;
+using Lab3.Models.Functions;
+using Lab3.Models;
 
 namespace Lab3
 {
@@ -35,35 +35,17 @@ namespace Lab3
         {
             app.Run(async context =>
             {
-                Parser parser = new Parser();
                 string text = context.Request.Query["xData"];
+                var parser = new Parser();
                 double[] xData = parser.parseArray(text);
-                FunctionRepository repo = new FunctionRepository();
-                repo.addFunction(new SinFunction());
-                repo.addFunction(new SquareFunction());
-                double[] yData = new double[xData.Length];
-                for (int i = 0; i < xData.Length; i++)
-                {
-                    yData[i] = repo.GetFunction(1).getY(xData[i]);       
-                }
 
-
-                double[] newXData = new double[xData.Length];
-                double[] newYData = new double[xData.Length];
-                for (int i = 0; i < newXData.Length; i++)
-                {
-                    newXData[i] = xData[i];
-                }
-
-                IInterpolationMethod method = new LagrangeMethod();
-                for (int i = 0; i < newXData.Length; i++)
-                {
-                    newYData[i] = method.getY(xData,yData,newXData[i]);
-                }
-
+                var interpolater = new Interpolater();
+                double[] newYData = interpolater.Interpolate(2,xData);
                 var sb = new StringBuilder();
-                for (int i = 0; i < newXData.Length; i++)
+                for (int i = 0; i < size2; i++)
                 {
+                    sb.Append(newXData[i]);
+                    sb.Append(' ');
                     sb.Append(newYData[i]);
                     sb.Append(' ');
                 }

@@ -1,10 +1,10 @@
 using System;
 
-namespace Lab3.Services.Methods
+namespace Lab3.Models.Methods
 {
     public class LagrangeMethod : IInterpolationMethod
     {
-        public double getY(double[] yData, double[] xData,  double x)
+        public double getY(double[] xData, double[] yData,  double x)
         {
             if (xData == null || yData == null)
                 throw new ArgumentNullException();
