@@ -53,8 +53,12 @@ function interpolate() {
 				let x = parseFloat(stringValues[index]);
 				index++;
 				let y = parseFloat(stringValues[index]);
+				index++;
+				let realY = parseFloat(stringValues[index]);
 				let point = {'x': x, 'y':y};
 				points.push(point);	
+				point['y'] = realY;
+				realPoints.push(point);
 			}
 			Draw(points);
 		},

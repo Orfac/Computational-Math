@@ -39,12 +39,13 @@ namespace Lab3
                 try
                 {
                     string text = context.Request.Query["xData"];
-                    string type = context.Request.Query["funcNumber"];
+                    string sType = context.Request.Query["funcNumber"];
+                    int type = int.Parse(sType);
                     var parser = new Parser();
                     double[] xData = parser.parseArray(text);
                     Array.Sort(xData);
                     var interpolater = new Interpolater();
-                    var result = interpolater.Interpolate(xData, funcNumber:2);
+                    var result = interpolater.Interpolate(xData, funcNumber:type);
 
                     var sb = new StringBuilder();
                     for (int i = 0; i < result.xData.Length; i++)
@@ -52,6 +53,8 @@ namespace Lab3
                         sb.Append(result.xData[i]);
                         sb.Append(' ');
                         sb.Append(result.yData[i]);
+                        sb.Append(' ');
+                        sb.Append(result.realYData[i]);
                         sb.Append(' ');
                     }
                     sb.Remove(sb.Length - 1,1);

@@ -7,10 +7,13 @@ namespace Lab3.Models
         public double[] xData {get;}
         public double[] yData {get;}
 
-         public InterpolateResult(double[] xData, double[] yData)
+        public double[] realYData {get;}
+
+         public InterpolateResult(double[] xData, double[] yData, double[] realYData)
         {
             this.xData = xData;
             this.yData = yData;
+            this.realYData = realYData;
         }
     }
 }

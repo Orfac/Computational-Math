@@ -49,7 +49,12 @@ namespace Lab3.Models
                 newYData[i] = _lagrange.getY(xData,yData,newXData[i]);
             }
 
-            return new InterpolateResult(newXData,newYData);
+            double[] realYData = new double[size2];
+            for (int i = 0; i < size2; i++)
+            {
+                realYData[i] = _repo.GetFunction(funcNumber).getY(newXData[i]);
+            }
+            return new InterpolateResult(newXData,newYData,realYData);
 
         }
     }
