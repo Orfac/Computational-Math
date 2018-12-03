@@ -8,6 +8,7 @@ using System.Text;
 using Lab3.Models.Methods;
 using Lab3.Models.Functions;
 using Lab3.Models;
+using System;
 
 namespace Lab3
 {
@@ -35,22 +36,32 @@ namespace Lab3
         {
             app.Run(async context =>
             {
-                string text = context.Request.Query["xData"];
-                var parser = new Parser();
-                double[] xData = parser.parseArray(text);
-
-                var interpolater = new Interpolater();
-                double[] newYData = interpolater.Interpolate(2,xData);
-                var sb = new StringBuilder();
-                for (int i = 0; i < size2; i++)
+                try
                 {
-                    sb.Append(newXData[i]);
-                    sb.Append(' ');
-                    sb.Append(newYData[i]);
-                    sb.Append(' ');
+                    string text = context.Request.Query["xData"];
+                    var parser = new Parser();
+                    double[] xData = parser.parseArray(text);
+
+                    var interpolater = new Interpolater();
+                    var result = interpolater.Interpolate(xData, funcNumber:2);
+
+                    var sb = new StringBuilder();
+                    for (int i = 0; i < result.xData.Length; i++)
+                    {
+                        sb.Append(result.xData[i]);
+                        sb.Append(' ');
+                        sb.Append(result.yData[i]);
+                        sb.Append(' ');
+                    }
+                    sb.Remove(sb.Length - 1,1);
+                    await context.Response.WriteAsync(sb.ToString());
                 }
-                sb.Remove(sb.Length - 1,1);
-                await context.Response.WriteAsync(sb.ToString());
+                catch (Exception ex)
+                {
+                    await context.Response.WriteAsync(ex.Message);
+                }
+                
+                
             });
         }     
     }

@@ -31,11 +31,16 @@ function interpolate() {
 		success: function (data,textStatus, xhr) {
 			let stringValues = data.split(" ");
 			points = [];
-
+			let floatValues = [];
+			for (let index = 0; index < stringValues.length; index++) {
+				floatValues = parseFloat(stringValues[index]);
+			}
+			floatValues.sort();
 			for (let index = 0; index < stringValues.length; index++) {
 				let x = parseFloat(stringValues[index]);
 				index++;
 				let y = parseFloat(stringValues[index]);
+				if (Math.abs())
 				let point = {'x': x, 'y':y};
 				points.push(point);	
 			}

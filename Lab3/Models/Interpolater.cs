@@ -12,6 +12,7 @@ namespace Lab3.Models
         {
             _repo = new FunctionRepository();
             _lagrange = new LagrangeMethod();
+            FuncInit();
         }
 
         public void FuncInit()
@@ -21,7 +22,7 @@ namespace Lab3.Models
             _repo.addFunction(new EPow());
         }
 
-        public double[] Interpolate(int funcNumber, double[] xData, double[] yData = null)
+        public InterpolateResult Interpolate(double[] xData, int funcNumber = 0, double[] yData = null)
         {
             int size1 = xData.Length;
             if (yData == null) 
@@ -47,6 +48,8 @@ namespace Lab3.Models
             {
                 newYData[i] = _lagrange.getY(xData,yData,newXData[i]);
             }
+
+            return new InterpolateResult(newXData,newYData);
 
         }
     }
