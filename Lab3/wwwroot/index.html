@@ -20,12 +20,15 @@
             <div class="main-component">
                 <button type="button" onclick="interpolate()">Интерполировать</button>
                 <div class="points-layout">
-                    <div class="point" >
+                    <div class="point" style="margin-top: 10px">
                         <div>
-                            <textarea id="xData" rows="10" cols="40" placeholder="1,23 13,14 23,41 23,4"></textarea>
+                            <textarea id="xData" rows="5" cols="20" placeholder="1,23 13,14 23,41 23,4"></textarea>
                         </div>
                     </div>              
                 </div>
+                <p><input id="sin" name="type" type="radio" value="sin" checked> sin(x) </p>
+                <p><input id="square" name="type" type="radio" value="square"> x^2 </p>
+                <p><input id="e" name="type" type="radio" value="e"> e^x + 2</p>
             </div>
             <div class="main-component">
                 <div id="graph"></div>

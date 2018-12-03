@@ -39,6 +39,7 @@ namespace Lab3
                 try
                 {
                     string text = context.Request.Query["xData"];
+                    string type = context.Request.Query["funcNumber"];
                     var parser = new Parser();
                     double[] xData = parser.parseArray(text);
                     Array.Sort(xData);
