@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Lab3.Services.Methods;
 using Lab3.Services.Parsers;
 using System.IO;
+using Lab3.Services.Functions;
+using System.Text;
 
 namespace Lab3
 {
@@ -15,8 +17,6 @@ namespace Lab3
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IInterpolationMethod,LagrangeMethod>();
-            services.AddTransient<IParser,Parser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,12 +35,40 @@ namespace Lab3
         {
             app.Run(async context =>
             {
-                var cont = context;
                 Parser parser = new Parser();
                 string text = context.Request.Query["xData"];
-                double[] x = parser.parseArray(text);
-                
-                await context.Response.WriteAsync("Index");
+                double[] xData = parser.parseArray(text);
+                FunctionRepository repo = new FunctionRepository();
+                repo.addFunction(new SinFunction());
+                repo.addFunction(new SquareFunction());
+                double[] yData = new double[xData.Length];
+                for (int i = 0; i < xData.Length; i++)
+                {
+                    yData[i] = repo.GetFunction(1).getY(xData[i]);       
+                }
+
+
+                double[] newXData = new double[xData.Length];
+                double[] newYData = new double[xData.Length];
+                for (int i = 0; i < newXData.Length; i++)
+                {
+                    newXData[i] = xData[i];
+                }
+
+                IInterpolationMethod method = new LagrangeMethod();
+                for (int i = 0; i < newXData.Length; i++)
+                {
+                    newYData[i] = method.getY(xData,yData,newXData[i]);
+                }
+
+                var sb = new StringBuilder();
+                for (int i = 0; i < newXData.Length; i++)
+                {
+                    sb.Append(newYData[i]);
+                    sb.Append(' ');
+                }
+                sb.Remove(sb.Length - 1,1);
+                await context.Response.WriteAsync(sb.ToString());
             });
         }     
     }

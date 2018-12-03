@@ -1,17 +1,4 @@
-var points = [
-	{ y: 450, x: 5.13},
-	{ y: 414, x: 3},
-	{ y: 524,x: 3},
-	{ y: 460,x: 3 },
-	{ y: 450,x: 3 },
-	{ y: 500,x: 3 },
-	{ y: 480,x: 3 },
-	{ y: 480,x: 3 },
-	{ y: 410,x: 3 },
-	{ y: 500,x: 3 },
-	{ y: 480,x: 9 },
-	{ y: 510,x: 3 }
-];
+var points = [];
 
 function Draw(points) {
 	var chart = new CanvasJS.Chart("graph", {
@@ -41,7 +28,19 @@ function interpolate() {
 		type: 'GET',
 		url: "Interpolate",
 		data: { 'xData': xData},
-		success: function (data,textStatus, xhr) { console.log(data)},
+		success: function (data,textStatus, xhr) {
+			let stringValues = data.split(" ");
+			let values = [];
+			for (let index = 0; index < stringValues.length; index++) {
+				values[index] = parseFloat(stringValues[index]);
+			}
+			points = [];
+			for (let i = 0; i < values.length; i++) {
+				let point = {'x': i, 'y': values[i]};
+				points.push(point);	
+			}
+			Draw(points);
+		},
 		error: function (a, jqXHR, exception) { }
 	});
 }
