@@ -41,7 +41,7 @@ namespace Lab3
                     string text = context.Request.Query["xData"];
                     var parser = new Parser();
                     double[] xData = parser.parseArray(text);
-
+                    Array.Sort(xData);
                     var interpolater = new Interpolater();
                     var result = interpolater.Interpolate(xData, funcNumber:2);
 
