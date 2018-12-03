@@ -8,11 +8,14 @@ namespace Lab3.Models
         private const int CountMult = 100;
         private FunctionRepository _repo;
         private LagrangeMethod _lagrange;
-        public Interpolater()
+        
+        private double offset;
+        public Interpolater(double offset)
         {
             _repo = new FunctionRepository();
             _lagrange = new LagrangeMethod();
             FuncInit();
+            this.offset = offset;
         }
 
         public void FuncInit()
@@ -24,13 +27,20 @@ namespace Lab3.Models
 
         public InterpolateResult Interpolate(double[] xData, int funcNumber = 0, double[] yData = null)
         {
+
             int size1 = xData.Length;
+            double[] yData0 = new double[size1];
             if (yData == null) 
             {
                 yData = new double[size1];
                 for (int i = 0; i < size1; i++)
                 {
-                    yData[i] = _repo.GetFunction(funcNumber).getY(xData[i]);       
+                    yData[i] = _repo.GetFunction(funcNumber).getY(xData[i]);   
+                   
+                    if (i%3 == 0){
+                        yData[i] += offset;
+                    }
+                     yData0[i] = yData[i];
                 }
             }
             int size2 = size1 * CountMult;
@@ -54,7 +64,7 @@ namespace Lab3.Models
             {
                 realYData[i] = _repo.GetFunction(funcNumber).getY(newXData[i]);
             }
-            return new InterpolateResult(newXData,newYData,realYData);
+            return new InterpolateResult(newXData,newYData,realYData,_repo.GetFunction(funcNumber).Name,yData0);
 
         }
     }

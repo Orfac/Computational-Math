@@ -1,8 +1,7 @@
 var points = [];
-var realPoints = [
-	
-];
+var realPoints = [];
 var funcName = "sin(x)";
+var basePoints = [];
 
 function Draw(points) {
 	var chart = new CanvasJS.Chart("graph", {
@@ -19,11 +18,17 @@ function Draw(points) {
 			dataPoints: points,
 			showInLegend: true,
 			name: "Интерполяция",
-			color: "#F08080"
+			color: "#008080"
 		},{ type: "line",
 			dataPoints: realPoints,
 			showInLegend: true,
-			name: funcName
+			name: funcName,
+			color: "#FF0000"
+		},{
+			type: "scatter",
+			markerType: "triangle",
+			dataPoints: basePoints,
+			color: "#000000"
 		}
 		]
 	});
@@ -34,22 +39,36 @@ window.onload = function () {
 	Draw(points);
 }	
 
-function interpolate() {
-	let xData = $('#xData')[0].value;
-	let number = getFuncNumber();
+var prevX = [];
 
+function interpolate() {
+	prevX = [];
+	let xData = $('#xData')[0].value;
+	let splitXdata = xData.split(' ');
+	for (let index = 0; index <= splitXdata.length; index++) {
+		prevX.push(parseFloat(splitXdata[index]));
+	}
+	let number = getFuncNumber();
+	let offset = $('#offset')[0].value;
+	if (offset == "") offset = 0;
 	$.ajax({
 		type: 'GET',
 		url: "Interpolate",
-		data: { 'xData': xData, 'funcNumber':number},
+		data: { 'xData': xData, 'funcNumber':number, 'offset': offset},
 		success: function (data,textStatus, xhr) {
 			let stringValues = data.split(" ");
+			basePoints = [];
+			funcName = stringValues[0];
 			points = [];
-			let floatValues = [];
-			for (let index = 0; index < stringValues.length; index++) {
-				floatValues = parseFloat(stringValues[index]);
+			realPoints = [];
+			var index = 1;
+			for (index; index < prevX.length; index++) {
+				let y = parseFloat(stringValues[index]);
+				let point3 = {'x': prevX[index-1], 'y': y};
+				basePoints.push(point3);
 			}
-			for (let index = 0; index < stringValues.length; index++) {
+
+			for (index; index < stringValues.length; index++) {
 				let x = parseFloat(stringValues[index]);
 				index++;
 				let y = parseFloat(stringValues[index]);
@@ -57,8 +76,8 @@ function interpolate() {
 				let realY = parseFloat(stringValues[index]);
 				let point = {'x': x, 'y':y};
 				points.push(point);	
-				point['y'] = realY;
-				realPoints.push(point);
+				let point2 = {'x': x, 'y': realY};
+				realPoints.push(point2);
 			}
 			Draw(points);
 		},

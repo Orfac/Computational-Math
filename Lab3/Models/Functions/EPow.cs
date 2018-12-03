@@ -4,7 +4,7 @@ namespace Lab3.Models.Functions
 {
     public class EPow : IFunction
     {
-        public string Name => "e^x + 2";
+        public string Name => "e^x+2";
 
         public double getY(double x)
         {
