@@ -45,9 +45,23 @@ function interpolate() {
 	prevX = [];
 	let xData = $('#xData')[0].value;
 	let splitXdata = xData.split(' ');
+	splitXdata.sort();
 	for (let index = 0; index <= splitXdata.length; index++) {
-		prevX.push(parseFloat(splitXdata[index]));
+		console.log(splitXdata[index]);
+		if (splitXdata[index] != " " && splitXdata[index] != "")
+			prevX.push(parseFloat(splitXdata[index]));
 	}
+	prevX.sort();
+	let check = false;
+	for (let index = 0; index < prevX.length; index++) {
+		for (let index2 = 0; index2 < prevX.length; index2++) {
+			const element = prevX[index];
+			
+		}
+		
+	}
+	
+	if (splitXdata.length < 3) return;
 	let number = getFuncNumber();
 	let offset = $('#offset')[0].value;
 	if (offset == "") offset = 0;
