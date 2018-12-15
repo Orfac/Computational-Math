@@ -22,14 +22,15 @@
                 <div class="points-layout">
                     <div class="point" style="margin-top: 10px">
                         <div>
-                            <textarea id="xData" rows="5" cols="20" placeholder="1.23 13.14 23.41 23.4"></textarea>
+                            <textarea onclick="Clear()" id="xData" rows="5" cols="20" placeholder="1.23 13.14 23.41 23.4"></textarea>
                         </div>
                     </div>              
                 </div>
+                <label id="input-error-label"></label>
                 <p><input id="sin" name="type" type="radio" value="sin" checked> sin(x) </p>
                 <p><input id="square" name="type" type="radio" value="square"> x^2 </p>
                 <p><input id="e" name="type" type="radio" value="e"> e^x + 2</p>
-                <div><p>Отклонение</p></div>
+                <div> Отклонение</div>
                 <div class="point" style="margin-top: 10px">
                     <div>
                         <input type="text" id="offset" placeholder="0,5">
