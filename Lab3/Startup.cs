@@ -42,7 +42,7 @@ namespace Lab3
                     string sType = context.Request.Query["funcNumber"];
                     string stringOffset = context.Request.Query["offset"];
 
-                    stringOffset = stringOffset.Replace(',','.');
+                    stringOffset = stringOffset.Replace('.',',');
                     double offset = double.Parse(stringOffset);
                     int type = int.Parse(sType);
                     var parser = new Parser();

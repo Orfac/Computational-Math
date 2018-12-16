@@ -53,7 +53,8 @@ function getFuncNumber() {
 }
 
 function onSuccess(data) {
-	let stringValues = data.split(" ");
+    // for linux need to replace . to ,
+    let stringValues = data.replace(/,/g, ".").split(" ");
 	parseResponse(stringValues);
 	Draw();
 }
