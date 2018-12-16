@@ -6,7 +6,8 @@ namespace Lab3.Services.Parsers
     {
         public double[] parseArray(string input)
         {
-            input = input.Replace(',','.');
+            // for linux use replacing from , to .
+            input = input.Replace('.',',');
             var elements = input.Split(new[] {' ', '\t', '\n', '\r'},
                 StringSplitOptions.RemoveEmptyEntries);
 
