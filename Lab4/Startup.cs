@@ -24,8 +24,58 @@ namespace Lab4
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.Run(async (context) => { await context.Response.WriteAsync("Hello World!"); });
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.Map("/Interpolate", Interpolate);
         }
+        
+        public static void Interpolate(IApplicationBuilder app)
+        {
+            app.Run(async context =>
+            {
+                try
+                {
+                    string text = context.Request.Query["xData"];
+                    string sType = context.Request.Query["funcNumber"];
+                    string stringOffset = context.Request.Query["offset"];
+
+                    stringOffset = stringOffset.Replace(',','.');
+                    double offset = double.Parse(stringOffset);
+                    int type = int.Parse(sType);
+                    var parser = new Parser();
+                    double[] xData = parser.parseArray(text);
+                    
+                    Array.Sort(xData);
+                    var interpolater = new Interpolater(offset);
+                    var result = interpolater.Interpolate(xData, funcNumber:type);
+
+                    var sb = new StringBuilder();
+                    sb.Append(result.funcName);
+                    sb.Append(' ');
+                    for (int i = 0; i < result.yData0.Length; i++)
+                    {
+                        sb.Append(result.yData0[i]);
+                        sb.Append(' ');
+                    }
+                    for (int i = 0; i < result.xData.Length; i++)
+                    {
+                        sb.Append(result.xData[i]);
+                        sb.Append(' ');
+                        sb.Append(result.yData[i]);
+                        sb.Append(' ');
+                        sb.Append(result.realYData[i]);
+                        sb.Append(' ');
+                    }
+                    sb.Remove(sb.Length - 1,1);
+                    await context.Response.WriteAsync(sb.ToString());
+                }
+                catch (Exception ex)
+                {
+                    await context.Response.WriteAsync(ex.Message);
+                }
+                
+                
+            });
+        }     
     }
 }
