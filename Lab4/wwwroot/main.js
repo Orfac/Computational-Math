@@ -53,7 +53,7 @@ function getFuncNumber() {
 }
 
 function onSuccess(data) {
-	let stringValues = data.split(" ");
+    let stringValues = data.replace(/,/g, ".").split(" ");
 	parseResponse(stringValues);
 	Draw();
 }

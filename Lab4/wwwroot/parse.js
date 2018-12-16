@@ -44,7 +44,7 @@ function parseResponse(stringValues){
 
 function parseXValues(xData, parsedX) {
     let splitXdata = xData.split(' ');
-    for (let index = 0; index <= splitXdata.length; index++) {
+    for (let index = 0; index < splitXdata.length; index++) {
         if (isStringNumber(splitXdata[index])){
             let newNumber = parseFloat(splitXdata[index]);
             if (isNaN(newNumber)){
