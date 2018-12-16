@@ -5,7 +5,7 @@ namespace Lab3.Models
 {
     public class Interpolater
     {
-        private const int CountMult = 100;
+        private const int CountMultiplier = 100;
         private FunctionRepository _repo;
         private LagrangeMethod _lagrange;
         
@@ -18,7 +18,7 @@ namespace Lab3.Models
             this.offset = offset;
         }
 
-        public void FuncInit()
+        private void FuncInit()
         {
             _repo.addFunction(new SquareFunction());
             _repo.addFunction(new SinFunction());
@@ -28,44 +28,79 @@ namespace Lab3.Models
         public InterpolateResult Interpolate(double[] xData, int funcNumber = 0, double[] yData = null)
         {
 
-            int size1 = xData.Length;
-            double[] yData0 = new double[size1];
-            if (yData == null) 
+            var baseSize = xData.Length;
+            var yBase = new double[baseSize];
+            if (yData == null)
             {
-                yData = new double[size1];
-                for (int i = 0; i < size1; i++)
-                {
-                    yData[i] = _repo.GetFunction(funcNumber).getY(xData[i]);   
-                   
-                    if (i%3 == 0){
-                        yData[i] += offset;
-                    }
-                     yData0[i] = yData[i];
-                }
-            }
-            int size2 = size1 * CountMult;
-            double[] newXData = new double[size2];
-
-            var diffValues = xData[size1 - 1] - xData[0];
-            var diff = diffValues / (size2);
-            for (int i = 0; i < size2; i++)
-            {
-                newXData[i] = diff*i + xData[0];
+                yData = CalculateYByFunction(xData, funcNumber, baseSize, yBase);
             }
             
-            double[] newYData = new double[size2];
-            for (int i = 0; i < size2; i++)
-            {
-                newYData[i] = _lagrange.getY(xData,yData,newXData[i]);
-            }
+            var interpolatedSize = GetInterpolatedSize(baseSize);
+            var newXData = CalculateNewXData(xData, interpolatedSize, baseSize);
+            var newYData = CalculateYByInterpolation(xData, yData, interpolatedSize, newXData);
+            var realYData = CalculateRealY(funcNumber, interpolatedSize, newXData);
+            
+            return new InterpolateResult(newXData,newYData,realYData,_repo.GetFunction(funcNumber).Name,yBase);
 
-            double[] realYData = new double[size2];
-            for (int i = 0; i < size2; i++)
+        }
+
+        private double[] CalculateRealY(int funcNumber, int interpolatedSize, double[] newXData)
+        {
+            var realYData = new double[interpolatedSize];
+            for (var i = 0; i < interpolatedSize; i++)
             {
                 realYData[i] = _repo.GetFunction(funcNumber).getY(newXData[i]);
             }
-            return new InterpolateResult(newXData,newYData,realYData,_repo.GetFunction(funcNumber).Name,yData0);
 
+            return realYData;
+        }
+
+        private double[] CalculateYByInterpolation(double[] xData, double[] yData, int interpolatedSize, double[] newXData)
+        {
+            var newYData = new double[interpolatedSize];
+            for (var i = 0; i < interpolatedSize; i++)
+            {
+                newYData[i] = _lagrange.getY(xData, yData, newXData[i]);
+            }
+
+            return newYData;
+        }
+
+        private double[] CalculateNewXData(double[] xData, int interpolatedSize, int baseSize)
+        {
+            var newXData = new double[interpolatedSize];
+
+            var diffValues = xData[baseSize - 1] - xData[0];
+            var diff = diffValues / (interpolatedSize);
+            for (var i = 0; i < interpolatedSize; i++)
+            {
+                newXData[i] = diff * i + xData[0];
+            }
+
+            return newXData;
+        }
+
+        private double[] CalculateYByFunction(double[] xData, int funcNumber, int baseSize, double[] yBase)
+        {
+            var yData = new double[baseSize];
+            for (var i = 0; i < baseSize; i++)
+            {
+                yData[i] = _repo.GetFunction(funcNumber).getY(xData[i]);
+
+                if (i % 3 == 0)
+                {
+                    yData[i] += offset;
+                }
+
+                yBase[i] = yData[i];
+            }
+
+            return yData;
+        }
+
+        private int GetInterpolatedSize(int baseSize)
+        {
+            return baseSize * CountMultiplier;
         }
     }
 }
