@@ -4,7 +4,6 @@ var funcName = "sin(x)";
 var basePoints = [];
 
 
-
 window.onload = function () {
 	Draw(points);
 };

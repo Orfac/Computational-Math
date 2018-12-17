@@ -1,8 +1,8 @@
 function clearPoints() {
-    parsedX = [];
-    basePoints = [];
     points = [];
+    basePoints = [];
     realPoints = [];
+    parsedX = [];
 }
 
 function getOffset() {
