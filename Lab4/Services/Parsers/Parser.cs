@@ -1,23 +1,34 @@
 using System;
+using Lab4.Models;
 
 namespace Lab4.Services.Parsers
 {
     public class Parser : IParser
     {
-        public double[] parseArray(string input)
+
+        public DiffirentialEquationInput ParseFromStrings(string sType, string stringx0, string stringy0, string stringxN, string stringAccuracy)
         {
-            // if Linux use replacing , to .
-            input = input.Replace('.',',');
-            var elements = input.Split(new[] {' ', '\t', '\n', '\r'},
-                StringSplitOptions.RemoveEmptyEntries);
+            // for linux change replacing to , to .
+            stringAccuracy = stringAccuracy.Replace('.', ',');
+            stringx0 = stringx0.Replace('.', ',');
+            stringxN = stringxN.Replace('.', ',');
+            stringy0 = stringy0.Replace('.', ',');
+   
+            double accuracy = double.Parse(stringAccuracy);
+            int type = int.Parse(sType);
+            double x0 = double.Parse(stringx0);
+            double xN = double.Parse(stringxN);
+            double y0 = double.Parse(stringy0);
 
-            double[] parsedArray = new double[elements.Length];
-            for (int i = 0; i < elements.Length; i++)
+            return new DiffirentialEquationInput
             {
-                parsedArray[i] = double.Parse(elements[i]);
-            }
+                FuncType = type,
+                Accuracy = accuracy,
+                X0 = x0,
+                XN = xN,
+                Y0 = y0
+            };
 
-            return parsedArray;
         }
     }
 }

@@ -29,48 +29,23 @@ namespace Lab4
             }
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.Map("/Interpolate", Interpolate);
+            app.Map("/diffirentiate", diffirentiate);
         }
         
-        public static void Interpolate(IApplicationBuilder app)
+        public static void diffirentiate(IApplicationBuilder app)
         {
             app.Run(async context =>
             {
                 try
                 {
-                    string text = context.Request.Query["xData"];
-                    string sType = context.Request.Query["funcNumber"];
-                    string stringOffset = context.Request.Query["offset"];
+                    var input = DiffirentialEquationInput.getFromRequest(context);
+                    var solver = new DiffirentialEquationSolver();
 
-                    stringOffset = stringOffset.Replace(',','.');
-                    double offset = double.Parse(stringOffset);
-                    int type = int.Parse(sType);
-                    var parser = new Parser();
-                    double[] xData = parser.parseArray(text);
+                    solver.Update(input);
+                    var result = solver.Solve();
+
                     
-                    Array.Sort(xData);
-                    var interpolater = new Interpolater(offset);
-                    var result = interpolater.Interpolate(xData, funcNumber:type);
-
-                    var sb = new StringBuilder();
-                    sb.Append(result.funcName);
-                    sb.Append(' ');
-                    for (int i = 0; i < result.yData0.Length; i++)
-                    {
-                        sb.Append(result.yData0[i]);
-                        sb.Append(' ');
-                    }
-                    for (int i = 0; i < result.xData.Length; i++)
-                    {
-                        sb.Append(result.xData[i]);
-                        sb.Append(' ');
-                        sb.Append(result.yData[i]);
-                        sb.Append(' ');
-                        sb.Append(result.realYData[i]);
-                        sb.Append(' ');
-                    }
-                    sb.Remove(sb.Length - 1,1);
-                    await context.Response.WriteAsync(sb.ToString());
+                    await context.Response.WriteAsync(result.ToString());
                 }
                 catch (Exception ex)
                 {

@@ -49,7 +49,7 @@ namespace Lab4.Models
             var realYData = new double[interpolatedSize];
             for (var i = 0; i < interpolatedSize; i++)
             {
-                realYData[i] = _repo.GetFunction(funcNumber).getY(newXData[i]);
+                realYData[i] = _repo.GetFunction(funcNumber).getY(newXData[i],0);
             }
 
             return realYData;
@@ -85,7 +85,7 @@ namespace Lab4.Models
             var yData = new double[baseSize];
             for (var i = 0; i < baseSize; i++)
             {
-                yData[i] = _repo.GetFunction(funcNumber).getY(xData[i]);
+                yData[i] = _repo.GetFunction(funcNumber).getY(xData[i],0);
 
                 if (i % 3 == 0)
                 {

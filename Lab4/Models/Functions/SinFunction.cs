@@ -6,7 +6,7 @@ namespace Lab4.Models.Functions
     {
         public string Name => "sin(x)";
 
-        public double getY(double x)
+        public double getY(double x, double y)
         {
             return Math.Sin(x);
         }

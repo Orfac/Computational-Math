@@ -39,6 +39,7 @@ button {
     text-align: center;
     font-size: 16px;
     cursor: pointer;
+    width:100%;
 }
 
 button:hover {
@@ -52,4 +53,25 @@ button:hover {
 #input-error-label{
     color: crimson;
     margin: 5px;
+}
+
+.input-field-container {
+    width: 100%;
+}
+.input-field-container div{
+    float:left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.input-field{
+    width: auto;
+}
+
+.input-field-label{
+    width: auto;
+}
+
+.input{
+
 }

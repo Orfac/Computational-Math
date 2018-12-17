@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Лабораторная работа №3</title>
+    <title>Лабораторная работа №4</title>
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -14,31 +14,64 @@
 <body>
     <div class="header">
         <div class="info-label">
-            <h2> Лабораторная работа №3 </h2>
-            <h3> Интерполирование многочленом Лагранжа</h3>
+            <h2> Лабораторная работа №4 </h2>
+            <h3> Решение ОДУ методом Милна</h3>
         </div>
     </div>
     <div class="main"> 
         <div class="main-component-layout">
             <div class="main-component">
-                <button type="button" onclick="interpolate()">Интерполировать</button>
-                <div class="points-layout">
-                    <div class="point" style="margin-top: 10px">
-                        <div>
-                            <textarea onclick="Clear()" id="xData" rows="5" cols="20" placeholder="1.23 13.14 23.41 23.4"></textarea>
-                        </div>
-                    </div>              
-                </div>
-                <label id="input-error-label"></label>
-                <p><input id="sin" name="type" type="radio" value="sin" checked> sin(x) </p>
-                <p><input id="square" name="type" type="radio" value="square"> x^2 </p>
-                <p><input id="e" name="type" type="radio" value="e"> e^x + 2</p>
-                <div> Отклонение</div>
-                <div class="point" style="margin-top: 10px">
-                    <div>
-                        <input type="text" id="offset" placeholder="0,5">
+                <button type="button" onclick="differentiate()">Построить график</button>
+                <div class="spliter"></div>
+                <div class="input-field-container">
+                    <div class="input-field-label" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X(0)=</div>
+                    <div class="input-field">
+                        <input class="input" onclick="Clear()" type="text" id="x0" placeholder="0,5">
                     </div>
-                </div>  
+                </div>
+                <div class="spliter"></div>
+                <div class="input-field-container">
+                    <div class="input-field-label" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y(0)=</div>
+                    <div class="input-field">
+                        <input class="input" onclick="Clear()" type="text" id="y0" placeholder="4,5">
+                    </div>
+                </div>
+                <div class="spliter"></div>
+                <div class="input-field-container">
+                    <div class="input-field-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X(n)=</div>
+                    <div class="input-field">
+                        <input class="input" type="text" onclick="Clear()" id="xn" placeholder="3,5">
+                    </div>
+                </div>
+                <div class="spliter"></div>
+                <div class="input-field-container" >
+                    <div class="input-field-label">Точность=</div>
+                    <div class="input-field">
+                        <input class="input" onclick="Clear()" type="text" id="accuracy" placeholder="0,1">
+                    </div>
+                </div>
+                <div class="spliter"></div>
+
+                <label id="input-error-label"></label>
+                <div> F(x,y): </div>
+                <p><input id="sin" name="type" type="radio" value="sin" checked> sin(x) </p>
+                <p><input id="square" name="type" type="radio" value="cube"> x^3 + 3x + y </p>
+                <p><input id="e" name="type" type="radio" value="square"> x^2 - 2x + 1</p>
+
+                <div class="input-field-container">
+                    <div class="input-field-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X(i)=</div>
+                    <div class="input-field">
+                        <input class="input" onclick="Clear()" type="text" id="xi" placeholder="2,5">
+                    </div>
+                </div>
+                <div class="input-field-container">
+                    <div class="input-field-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y(i)=</div>
+                    <div class="input-field">
+                        <input class="input" type="text" id="yi" disabled>
+                    </div>
+                </div>
+
+                <button type="button" onclick="getValue()">Получить значение</button>
             </div>
             <div class="main-component">
                 <div id="graph"></div>

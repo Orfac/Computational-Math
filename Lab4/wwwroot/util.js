@@ -1,24 +1,27 @@
 function clearPoints() {
-    parsedX = [];
     basePoints = [];
     points = [];
     realPoints = [];
 }
 
-function getOffset() {
-    let offset = $('#offset')[0].value.replace(/,/g , ".");
-    if ("" === offset) offset = 0;
-    return offset;
+function getField(name) {
+    let name2 = '#' + name;
+    let field = $('#' + name)[0].value.replace(/,/g , ".");
+    if ("" === field) {
+        writeError("Забыли обязательное поле ", name);
+        return undefined;
+    }
+    return field;
 }
 
 
 function getFuncNumber() {
-    let e = $('#e');
-    let square = $('#square');
     let sin = $('#sin');
+    let cube = $('#cube');
+    let square = $('#square');
 
     if (square[0].checked){
-        return 0;
+        return 3;
     } else {
         if (sin[0].checked){
             return 1;

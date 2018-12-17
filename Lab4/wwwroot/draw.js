@@ -9,18 +9,8 @@ function Draw() {
             type: "line",
             dataPoints: points,
             showInLegend: true,
-            name: "Интерполяция",
+            name: "Решение ОДУ",
             color: "#008080"
-        },{ type: "line",
-            dataPoints: realPoints,
-            showInLegend: true,
-            name: funcName,
-            color: "#ff341d"
-        },{
-            type: "scatter",
-            markerType: "triangle",
-            dataPoints: basePoints,
-            color: "#000000"
         }
         ]
     });

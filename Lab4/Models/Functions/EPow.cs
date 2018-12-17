@@ -6,7 +6,7 @@ namespace Lab4.Models.Functions
     {
         public string Name => "e^x+2";
 
-        public double getY(double x)
+        public double getY(double x,double y)
         {
             return Math.Pow(Math.E, x) + 2;
         }

@@ -1,33 +1,52 @@
 var points = [];
-var realPoints = [];
 var funcName = "sin(x)";
-var basePoints = [];
 
 
 
 window.onload = function () {
-	Draw(points);
+    Draw(points);
 };
 
-var parsedX = [];
+function differentiate() {
+    clearPoints();
 
-function interpolate() {
-	clearPoints();
-	
-	let number = getFuncNumber();
-	let offset = getOffset();
-	let xHandledData = parseX();
-	
-	doRequest(xHandledData,number,offset);
+    let x0 = getField('x0');
+    if (x0 === undefined) return;
+    let y0 = getField('y0');
+    if (y0=== undefined) return;
+    let xn = getField('xn');
+    if (xn === undefined) return;
+    let accuracy = getField('accuracy');
+    if (accuracy === undefined) return;
+
+    console.log(x0);
+    console.log(y0);
+    console.log(xn);
+    console.log(accuracy);
+    if (isNaN(parseFloat(x0)) || isNaN(parseFloat(y0)) ||
+        isNaN(parseFloat(xn)) || isNaN(parseFloat(accuracy))) {
+        Clear();
+        writeError('Только вещ. числа');
+        return;
+    }
+
+    let funcNumber = getFuncNumber();
+    doRequest(x0, y0, xn, accuracy, funcNumber);
 }
 
 
-function doRequest(xHandledData,number,offset) {
+function doRequest(x0, y0, xn, accuracy, funcNumber) {
     $.ajax({
         type: 'GET',
-        url: "Interpolate",
-        data: { 'xData': xHandledData.join(" "), 'funcNumber':number, 'offset': offset},
-        success: function (data,textStatus, xhr) {
+        url: "diffirentiate",
+        data: {
+            'x0': x0,
+            'y0': y0,
+            'xn': xn,
+            'accuracy': accuracy,
+            'funcNumber': funcNumber
+        },
+        success: function (data, textStatus, xhr) {
             onSuccess(data);
         },
         error: function (a, jqXHR, exception) {
@@ -36,26 +55,10 @@ function doRequest(xHandledData,number,offset) {
     });
 }
 
-function getFuncNumber() {
-	let e = $('#e');
-	let square = $('#square');
-	let sin = $('#sin');
-
-	if (square[0].checked){
-		return 0;
-	} else {
-		if (sin[0].checked){
-			return 1;
-		} else {
-			return 2;
-		}
-	}
-}
-
 function onSuccess(data) {
     let stringValues = data.replace(/,/g, ".").split(" ");
-	parseResponse(stringValues);
-	Draw();
+    parseResponse(stringValues);
+    Draw();
 }
 
 function onError() {
