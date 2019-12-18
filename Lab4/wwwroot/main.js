@@ -18,11 +18,7 @@ function differentiate() {
     if (xn === undefined) return;
     let accuracy = getField('accuracy');
     if (accuracy === undefined) return;
-
-    console.log(x0);
-    console.log(y0);
-    console.log(xn);
-    console.log(accuracy);
+    
     if (isNaN(parseFloat(x0)) || isNaN(parseFloat(y0)) ||
         isNaN(parseFloat(xn)) || isNaN(parseFloat(accuracy))) {
         Clear();
@@ -34,6 +30,28 @@ function differentiate() {
     doRequest(x0, y0, xn, accuracy, funcNumber);
 }
 
+function singleRequest() {
+    let xi = getField('xi');
+    if (xi === undefined) return;
+    if (isNaN(xi)){
+        writeError('Только вещ. числа')
+        return;
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: "getSingle",
+        data: {
+            'xi': xi
+        },
+        success: function (data, textStatus, xhr) {
+            $('#yi')[0].value = data;
+        },
+        error: function (a, jqXHR, exception) {
+            onError();
+        }
+    });
+}
 
 function doRequest(x0, y0, xn, accuracy, funcNumber) {
     $.ajax({

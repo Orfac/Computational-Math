@@ -20,9 +20,9 @@ namespace Lab4.Models
 
         private void FuncInit()
         {
-            _repo.addFunction(new SquareFunction());
             _repo.addFunction(new SinFunction());
-            _repo.addFunction(new EPow());
+            _repo.addFunction(new CubeFunction());
+            _repo.addFunction(new SquareFunction());
         }
 
         public InterpolateResult Interpolate(double[] xData, int funcNumber = 0, double[] yData = null)

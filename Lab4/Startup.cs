@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lab4.Models;
 using Lab4.Services.Parsers;
+using Lab4.Models.Methods;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,8 +31,37 @@ namespace Lab4
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.Map("/diffirentiate", diffirentiate);
+            app.Map("/getSingle", getSingle);
         }
         
+        public static void getSingle(IApplicationBuilder app)
+        {
+            app.Run(async context =>
+            {
+                try
+                {
+                    var input = SingleXInput.getFromRequest(context);
+                    var lagrange = new LagrangeMethod();
+                    var differentialValues = DiffirentialEquationSolver.lastValues;
+                    double[] resx = new double[differentialValues.Count];
+                    double[] resy = new double[differentialValues.Count];
+                    for (int i = 0; i < differentialValues.Count; i++)
+                    {
+                        resx[i] = differentialValues[i].X;
+                        resy[i] = differentialValues[i].Y;
+                    }
+                    var result = lagrange.getY(resx,resy,input.X);
+                    
+                    await context.Response.WriteAsync(result.ToString());
+                }
+                catch (Exception ex)
+                {
+                    await context.Response.WriteAsync(ex.Message);
+                }
+                
+                
+            });
+        }
         public static void diffirentiate(IApplicationBuilder app)
         {
             app.Run(async context =>
@@ -39,13 +69,18 @@ namespace Lab4
                 try
                 {
                     var input = DiffirentialEquationInput.getFromRequest(context);
-                    var solver = new DiffirentialEquationSolver();
-
-                    solver.Update(input);
-                    var result = solver.Solve();
-
                     
-                    await context.Response.WriteAsync(result.ToString());
+
+                    DiffirentialEquationSolver.Update(input);
+                    var resultDiff = DiffirentialEquationSolver.Solve();
+
+                    var interpolater = new Interpolater(0);
+                    var resultInterpolate = interpolater.Interpolate(
+                        resultDiff.xData,0,resultDiff.yData
+                    );
+                    resultDiff.xData = resultInterpolate.xData;
+                    resultDiff.yData = resultInterpolate.yData;
+                    await context.Response.WriteAsync(resultDiff.ToString());
                 }
                 catch (Exception ex)
                 {

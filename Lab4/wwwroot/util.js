@@ -1,14 +1,12 @@
 function clearPoints() {
-    basePoints = [];
     points = [];
-    realPoints = [];
 }
 
 function getField(name) {
     let name2 = '#' + name;
     let field = $('#' + name)[0].value.replace(/,/g , ".");
     if ("" === field) {
-        writeError("Забыли обязательное поле ", name);
+        writeError("РќРµ Р·Р°РїРѕР»РЅРµРЅРѕ РїРѕР»Рµ! ", name);
         return undefined;
     }
     return field;
@@ -21,12 +19,12 @@ function getFuncNumber() {
     let square = $('#square');
 
     if (square[0].checked){
-        return 3;
+        return 2;
     } else {
         if (sin[0].checked){
-            return 1;
+            return 0;
         } else {
-            return 2;
+            return 1;
         }
     }
 }
